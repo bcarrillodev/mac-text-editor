@@ -1,81 +1,93 @@
-import XCTest
+import Foundation
+import Testing
 @testable import TextEditor
 
-class EditorWorkflowTests: XCTestCase {
-    let testFilePath = NSTemporaryDirectory() + "workflow_test.txt"
-    
-    override func tearDown() {
-        try? FileManager.default.removeItem(atPath: testFilePath)
-        SessionPersistenceService.shared.clearSession()
-        super.tearDown()
+@Suite("EditorWorkflow")
+struct EditorWorkflowTests {
+    private func makeIsolatedService() -> (SessionPersistenceService, UserDefaults, String) {
+        let suiteName = "EditorWorkflowTests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        let service = SessionPersistenceService(
+            sessionKey: "EditorSession.\(UUID().uuidString)",
+            userDefaults: defaults
+        )
+        return (service, defaults, suiteName)
     }
-    
-    func testOpenEditSaveRestoreWorkflow() throws {
-        // Create a test file
+
+    @Test("Open, edit, save, restore workflow")
+    func openEditSaveRestoreWorkflow() throws {
+        let (service, defaults, suiteName) = makeIsolatedService()
+
+        let testFilePath = NSTemporaryDirectory() + UUID().uuidString + "_workflow_test.txt"
+        defer {
+            try? FileManager.default.removeItem(atPath: testFilePath)
+            defaults.removePersistentDomain(forName: suiteName)
+        }
+
         try FileService.shared.createNewFile(path: testFilePath, initialContent: "Initial content")
-        
-        // Step 1: Open file
+
         let state = EditorState()
         state.openFile(testFilePath)
-        XCTAssertEqual(state.openTabs.count, 1)
-        
-        // Step 2: Edit content
+        #expect(state.openTabs.count == 1)
+
         state.updateContent(tabIndex: 0, content: "Edited content")
-        XCTAssertTrue(state.openTabs[0].isModified)
-        
-        // Step 3: Save to file
+        #expect(state.openTabs[0].isModified)
+
         try FileService.shared.writeFile(path: testFilePath, content: "Edited content")
         state.markAllSaved()
-        
-        // Step 4: Save session
-        try SessionPersistenceService.shared.saveSession(state: state)
-        
-        // Step 5: Load session (simulating app restart)
-        SessionPersistenceService.shared.clearSession()
-        let restoredState = SessionPersistenceService.shared.loadSession()
-        
-        XCTAssertNotNil(restoredState)
-        XCTAssertEqual(restoredState?.openTabs.count, 1)
-        XCTAssertEqual(restoredState?.openTabs[0].filePath, testFilePath)
+
+        try service.saveSession(state: state)
+
+        let restoredState = service.loadSession()
+        #expect(restoredState != nil)
+        #expect(restoredState?.openTabs.count == 1)
+        #expect(restoredState?.openTabs[0].filePath == testFilePath)
     }
-    
-    func testMultipleTabsWorkflow() throws {
-        let file1 = NSTemporaryDirectory() + "file1.txt"
-        let file2 = NSTemporaryDirectory() + "file2.txt"
-        
+
+    @Test("Multiple tabs workflow")
+    func multipleTabsWorkflow() throws {
+        let file1 = NSTemporaryDirectory() + UUID().uuidString + "_file1.txt"
+        let file2 = NSTemporaryDirectory() + UUID().uuidString + "_file2.txt"
+
         defer {
             try? FileManager.default.removeItem(atPath: file1)
             try? FileManager.default.removeItem(atPath: file2)
         }
-        
+
         try FileService.shared.createNewFile(path: file1, initialContent: "File 1")
         try FileService.shared.createNewFile(path: file2, initialContent: "File 2")
-        
+
         let state = EditorState()
         state.openFile(file1)
         state.openFile(file2)
-        
-        XCTAssertEqual(state.openTabs.count, 2)
-        XCTAssertEqual(state.activeTabIndex, 1)
-        
+
+        #expect(state.openTabs.count == 2)
+        #expect(state.activeTabIndex == 1)
+
         state.switchToTab(index: 0)
-        XCTAssertEqual(state.activeTabIndex, 0)
+        #expect(state.activeTabIndex == 0)
     }
-    
-    func testContentPersistenceAcrossRestarts() throws {
+
+    @Test("Content persistence across restarts")
+    func contentPersistenceAcrossRestarts() throws {
+        let (service, defaults, suiteName) = makeIsolatedService()
+
+        let testFilePath = NSTemporaryDirectory() + UUID().uuidString + "_workflow_test.txt"
+        defer {
+            try? FileManager.default.removeItem(atPath: testFilePath)
+            defaults.removePersistentDomain(forName: suiteName)
+        }
+
         let testContent = "Persistent content"
         try FileService.shared.createNewFile(path: testFilePath, initialContent: "")
-        
+
         let state1 = EditorState()
         state1.openFile(testFilePath)
         state1.updateContent(tabIndex: 0, content: testContent)
         try FileService.shared.writeFile(path: testFilePath, content: testContent)
-        try SessionPersistenceService.shared.saveSession(state: state1)
-        
-        // Simulate restart
-        SessionPersistenceService.shared.clearSession()
-        let restoredState = SessionPersistenceService.shared.loadSession()
-        
-        XCTAssertEqual(restoredState?.openTabs[0].content, testContent)
+        try service.saveSession(state: state1)
+
+        let restoredState = service.loadSession()
+        #expect(restoredState?.openTabs[0].content == testContent)
     }
 }

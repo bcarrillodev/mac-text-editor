@@ -1,54 +1,63 @@
-import XCTest
+import Foundation
+import Testing
 @testable import TextEditor
 
-class AutoSaveIntegrationTests: XCTestCase {
-    func testAutoSaveTriggersCallback() {
-        let expectation = XCTestExpectation(description: "Auto-save callback triggered")
+@Suite("AutoSaveIntegration")
+struct AutoSaveIntegrationTests {
+    @Test("Auto-save triggers callback")
+    @MainActor
+    func autoSaveTriggersCallback() async throws {
+        var didFire = false
         let autoSaveService = AutoSaveService()
         autoSaveService.saveInterval = 0.1
-        
+        defer { autoSaveService.stopAutoSave() }
+
         autoSaveService.startAutoSave {
-            expectation.fulfill()
+            didFire = true
         }
-        
-        wait(for: [expectation], timeout: 2.0)
-        autoSaveService.stopAutoSave()
+
+        for _ in 0..<100 {
+            if didFire { break }
+            try await Task.sleep(nanoseconds: 20_000_000)
+        }
+
+        #expect(didFire)
     }
-    
-    func testStopAutoSave() {
-        let expectation = XCTestExpectation(description: "Auto-save callback NOT triggered")
-        expectation.isInverted = true
-        
+
+    @Test("Stop auto-save prevents callback")
+    @MainActor
+    func stopAutoSavePreventsCallback() async throws {
+        var callCount = 0
         let autoSaveService = AutoSaveService()
         autoSaveService.saveInterval = 0.1
-        
+
         autoSaveService.startAutoSave {
-            expectation.fulfill()
+            callCount += 1
         }
-        
+
         autoSaveService.stopAutoSave()
-        
-        wait(for: [expectation], timeout: 0.5)
+        try await Task.sleep(nanoseconds: 300_000_000)
+
+        #expect(callCount == 0)
     }
-    
-    func testMultipleSavesWork() {
+
+    @Test("Multiple auto-saves work")
+    @MainActor
+    func multipleSavesWork() async throws {
         var callCount = 0
         let autoSaveService = AutoSaveService()
         autoSaveService.saveInterval = 0.05
-        
-        let expectation = XCTestExpectation(description: "Multiple auto-saves triggered")
-        expectation.expectedFulfillmentCount = 3
-        
+        defer { autoSaveService.stopAutoSave() }
+
         autoSaveService.startAutoSave {
             callCount += 1
-            if callCount <= 3 {
-                expectation.fulfill()
-            }
         }
-        
-        wait(for: [expectation], timeout: 2.0)
-        autoSaveService.stopAutoSave()
-        
-        XCTAssertGreaterThanOrEqual(callCount, 3)
+
+        for _ in 0..<200 {
+            if callCount >= 3 { break }
+            try await Task.sleep(nanoseconds: 20_000_000)
+        }
+
+        #expect(callCount >= 3)
     }
 }

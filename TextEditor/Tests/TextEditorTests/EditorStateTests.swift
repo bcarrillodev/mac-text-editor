@@ -1,116 +1,141 @@
-import XCTest
+import Testing
 @testable import TextEditor
 
-class EditorStateTests: XCTestCase {
-    var state: EditorState!
-    
-    override func setUp() {
-        super.setUp()
-        state = EditorState()
+@Suite("EditorState")
+struct EditorStateTests {
+    private func makeState() -> EditorState {
+        EditorState()
     }
-    
-    func testOpenFile() {
+
+    @Test("Open file")
+    func openFile() {
+        let state = makeState()
         state.openFile("/tmp/file1.txt", content: "Hello")
-        XCTAssertEqual(state.openTabs.count, 1)
-        XCTAssertEqual(state.openTabs[0].filePath, "/tmp/file1.txt")
-        XCTAssertEqual(state.openTabs[0].content, "Hello")
-        XCTAssertEqual(state.activeTabIndex, 0)
-    }
-    
-    func testOpenMultipleFiles() {
-        state.openFile("/tmp/file1.txt")
-        state.openFile("/tmp/file2.txt")
-        XCTAssertEqual(state.openTabs.count, 2)
-        XCTAssertEqual(state.activeTabIndex, 1)
-    }
-    
-    func testOpenDuplicateFile() {
-        state.openFile("/tmp/file1.txt")
-        state.openFile("/tmp/file1.txt")
-        XCTAssertEqual(state.openTabs.count, 1)
+
+        #expect(state.openTabs.count == 1)
+        #expect(state.openTabs[0].filePath == "/tmp/file1.txt")
+        #expect(state.openTabs[0].content == "Hello")
+        #expect(state.activeTabIndex == 0)
     }
 
-    func testOpenDuplicateFileSwitchesToExistingTab() {
+    @Test("Open multiple files")
+    func openMultipleFiles() {
+        let state = makeState()
         state.openFile("/tmp/file1.txt")
         state.openFile("/tmp/file2.txt")
-        XCTAssertEqual(state.activeTabIndex, 1)
 
-        state.openFile("/tmp/file1.txt")
-
-        XCTAssertEqual(state.openTabs.count, 2)
-        XCTAssertEqual(state.activeTabIndex, 0)
+        #expect(state.openTabs.count == 2)
+        #expect(state.activeTabIndex == 1)
     }
-    
-    func testCloseTab() {
+
+    @Test("Open duplicate file")
+    func openDuplicateFile() {
+        let state = makeState()
+        state.openFile("/tmp/file1.txt")
+        state.openFile("/tmp/file1.txt")
+
+        #expect(state.openTabs.count == 1)
+    }
+
+    @Test("Open duplicate switches to existing tab")
+    func openDuplicateFileSwitchesToExistingTab() {
+        let state = makeState()
         state.openFile("/tmp/file1.txt")
         state.openFile("/tmp/file2.txt")
-        XCTAssertEqual(state.openTabs.count, 2)
-        
+        #expect(state.activeTabIndex == 1)
+
+        state.openFile("/tmp/file1.txt")
+
+        #expect(state.openTabs.count == 2)
+        #expect(state.activeTabIndex == 0)
+    }
+
+    @Test("Close tab")
+    func closeTab() {
+        let state = makeState()
+        state.openFile("/tmp/file1.txt")
+        state.openFile("/tmp/file2.txt")
+        #expect(state.openTabs.count == 2)
+
         state.closeTab(at: 0)
-        XCTAssertEqual(state.openTabs.count, 1)
-        XCTAssertEqual(state.openTabs[0].filePath, "/tmp/file2.txt")
+
+        #expect(state.openTabs.count == 1)
+        #expect(state.openTabs[0].filePath == "/tmp/file2.txt")
     }
-    
-    func testCloseTabAdjustsActiveIndex() {
+
+    @Test("Close tab adjusts active index")
+    func closeTabAdjustsActiveIndex() {
+        let state = makeState()
         state.openFile("/tmp/file1.txt")
         state.openFile("/tmp/file2.txt")
         state.openFile("/tmp/file3.txt")
-        
+
         state.closeTab(at: 2)
-        XCTAssertEqual(state.activeTabIndex, 1)
+        #expect(state.activeTabIndex == 1)
     }
-    
-    func testSwitchToTab() {
+
+    @Test("Switch to tab")
+    func switchToTab() {
+        let state = makeState()
         state.openFile("/tmp/file1.txt")
         state.openFile("/tmp/file2.txt")
-        XCTAssertEqual(state.activeTabIndex, 1)
-        
+        #expect(state.activeTabIndex == 1)
+
         state.switchToTab(index: 0)
-        XCTAssertEqual(state.activeTabIndex, 0)
+        #expect(state.activeTabIndex == 0)
     }
-    
-    func testUpdateContent() {
+
+    @Test("Update content marks modified")
+    func updateContent() {
+        let state = makeState()
         state.openFile("/tmp/file1.txt")
         state.updateContent(tabIndex: 0, content: "New content")
-        
-        XCTAssertEqual(state.openTabs[0].content, "New content")
-        XCTAssertTrue(state.openTabs[0].isModified)
-        XCTAssertTrue(state.unsavedChanges["/tmp/file1.txt"] ?? false)
+
+        #expect(state.openTabs[0].content == "New content")
+        #expect(state.openTabs[0].isModified)
+        #expect(state.unsavedChanges["/tmp/file1.txt"] == true)
     }
-    
-    func testGetActiveTab() {
+
+    @Test("Get active tab")
+    func getActiveTab() {
+        let state = makeState()
         state.openFile("/tmp/file1.txt")
         state.openFile("/tmp/file2.txt")
-        
-        let activeTab = state.getActiveTab()
-        XCTAssertEqual(activeTab?.filePath, "/tmp/file2.txt")
+
+        #expect(state.getActiveTab()?.filePath == "/tmp/file2.txt")
     }
-    
-    func testMarkAllSaved() {
+
+    @Test("Mark all saved")
+    func markAllSaved() {
+        let state = makeState()
         state.openFile("/tmp/file1.txt")
         state.openFile("/tmp/file2.txt")
         state.updateContent(tabIndex: 0, content: "content1")
         state.updateContent(tabIndex: 1, content: "content2")
-        
-        XCTAssertTrue(state.unsavedChanges.count > 0)
-        
+
+        #expect(state.unsavedChanges.count > 0)
+
         state.markAllSaved()
-        XCTAssertFalse(state.openTabs[0].isModified)
-        XCTAssertFalse(state.openTabs[1].isModified)
-        XCTAssertEqual(state.unsavedChanges.count, 0)
+        #expect(state.openTabs[0].isModified == false)
+        #expect(state.openTabs[1].isModified == false)
+        #expect(state.unsavedChanges.count == 0)
     }
 
-    func testCloseTabRemovesUnsavedMarker() {
+    @Test("Close tab removes unsaved marker")
+    func closeTabRemovesUnsavedMarker() {
+        let state = makeState()
         state.openFile("/tmp/file1.txt")
         state.updateContent(tabIndex: 0, content: "content1")
-        XCTAssertTrue(state.unsavedChanges["/tmp/file1.txt"] ?? false)
+        #expect(state.unsavedChanges["/tmp/file1.txt"] == true)
 
         state.closeTab(at: 0)
 
-        XCTAssertNil(state.unsavedChanges["/tmp/file1.txt"])
+        #expect(state.unsavedChanges["/tmp/file1.txt"] == nil)
     }
 
-    func testMarkTabSavedOnlyClearsSpecifiedTab() {
+    @Test("Mark tab saved only clears specified tab")
+    func markTabSavedOnlyClearsSpecifiedTab() {
+        let state = makeState()
         state.openFile("/tmp/file1.txt")
         state.openFile("/tmp/file2.txt")
         state.updateContent(tabIndex: 0, content: "content1")
@@ -118,65 +143,77 @@ class EditorStateTests: XCTestCase {
 
         state.markTabSaved(at: 0)
 
-        XCTAssertFalse(state.openTabs[0].isModified)
-        XCTAssertTrue(state.openTabs[1].isModified)
-        XCTAssertNil(state.unsavedChanges["/tmp/file1.txt"])
-        XCTAssertTrue(state.unsavedChanges["/tmp/file2.txt"] ?? false)
+        #expect(state.openTabs[0].isModified == false)
+        #expect(state.openTabs[1].isModified)
+        #expect(state.unsavedChanges["/tmp/file1.txt"] == nil)
+        #expect(state.unsavedChanges["/tmp/file2.txt"] == true)
     }
 
-    func testUpdateTabPathMovesUnsavedMarker() {
+    @Test("Update tab path moves unsaved marker")
+    func updateTabPathMovesUnsavedMarker() {
+        let state = makeState()
         state.createUntitledFile()
         state.updateContent(tabIndex: 0, content: "Draft")
-        XCTAssertTrue(state.unsavedChanges["untitled"] ?? false)
+        #expect(state.unsavedChanges["untitled"] == true)
 
         state.updateTabPath(at: 0, newPath: "/tmp/saved.txt")
 
-        XCTAssertEqual(state.openTabs[0].filePath, "/tmp/saved.txt")
-        XCTAssertEqual(state.openTabs[0].fileName, "saved.txt")
-        XCTAssertNil(state.unsavedChanges["untitled"])
-        XCTAssertTrue(state.unsavedChanges["/tmp/saved.txt"] ?? false)
+        #expect(state.openTabs[0].filePath == "/tmp/saved.txt")
+        #expect(state.openTabs[0].fileName == "saved.txt")
+        #expect(state.unsavedChanges["untitled"] == nil)
+        #expect(state.unsavedChanges["/tmp/saved.txt"] == true)
     }
 
-    func testFindMatchCountCaseSensitive() {
+    @Test("Find match count case sensitive")
+    func findMatchCountCaseSensitive() {
+        let state = makeState()
         state.openFile("/tmp/file1.txt", content: "Hello hello HELLO")
 
-        XCTAssertEqual(state.findMatchCount(inActiveTab: "Hello"), 1)
-        XCTAssertEqual(state.findMatchCount(inActiveTab: "hello"), 1)
-        XCTAssertEqual(state.findMatchCount(inActiveTab: "HELLO"), 1)
+        #expect(state.findMatchCount(inActiveTab: "Hello") == 1)
+        #expect(state.findMatchCount(inActiveTab: "hello") == 1)
+        #expect(state.findMatchCount(inActiveTab: "HELLO") == 1)
     }
 
-    func testFindMatchCountCaseInsensitive() {
+    @Test("Find match count case insensitive")
+    func findMatchCountCaseInsensitive() {
+        let state = makeState()
         state.openFile("/tmp/file1.txt", content: "Hello hello HELLO")
 
-        XCTAssertEqual(state.findMatchCount(inActiveTab: "hello", caseSensitive: false), 3)
+        #expect(state.findMatchCount(inActiveTab: "hello", caseSensitive: false) == 3)
     }
 
-    func testReplaceNextInActiveTab() {
+    @Test("Replace next in active tab")
+    func replaceNextInActiveTab() {
+        let state = makeState()
         state.openFile("/tmp/file1.txt", content: "cat cat cat")
 
         let replaced = state.replaceNextInActiveTab(find: "cat", with: "dog")
 
-        XCTAssertTrue(replaced)
-        XCTAssertEqual(state.openTabs[0].content, "dog cat cat")
-        XCTAssertTrue(state.openTabs[0].isModified)
+        #expect(replaced)
+        #expect(state.openTabs[0].content == "dog cat cat")
+        #expect(state.openTabs[0].isModified)
     }
 
-    func testReplaceAllInActiveTab() {
+    @Test("Replace all in active tab")
+    func replaceAllInActiveTab() {
+        let state = makeState()
         state.openFile("/tmp/file1.txt", content: "cat cat cat")
 
         let replacedCount = state.replaceAllInActiveTab(find: "cat", with: "dog")
 
-        XCTAssertEqual(replacedCount, 3)
-        XCTAssertEqual(state.openTabs[0].content, "dog dog dog")
-        XCTAssertTrue(state.openTabs[0].isModified)
+        #expect(replacedCount == 3)
+        #expect(state.openTabs[0].content == "dog dog dog")
+        #expect(state.openTabs[0].isModified)
     }
 
-    func testReplaceAllInActiveTabNoMatch() {
+    @Test("Replace all in active tab no match")
+    func replaceAllInActiveTabNoMatch() {
+        let state = makeState()
         state.openFile("/tmp/file1.txt", content: "cat cat cat")
 
         let replacedCount = state.replaceAllInActiveTab(find: "bird", with: "dog")
 
-        XCTAssertEqual(replacedCount, 0)
-        XCTAssertEqual(state.openTabs[0].content, "cat cat cat")
+        #expect(replacedCount == 0)
+        #expect(state.openTabs[0].content == "cat cat cat")
     }
 }

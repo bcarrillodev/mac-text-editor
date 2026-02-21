@@ -1,7 +1,9 @@
 import SwiftUI
 import AppKit
+import OSLog
 
 struct ContentView: View {
+    private let logger = Logger(subsystem: "mac-text-editor", category: "ContentView")
     @StateObject private var state = EditorState()
     @StateObject private var autoSaveService = AutoSaveService()
 
@@ -70,7 +72,11 @@ struct ContentView: View {
     }
 
     private func saveSession() {
-        try? SessionPersistenceService.shared.saveSession(state: state)
+        do {
+            try SessionPersistenceService.shared.saveSession(state: state)
+        } catch {
+            logger.error("Failed to save editor session: \(error.localizedDescription, privacy: .public)")
+        }
     }
 
     private func saveActiveTab() {
@@ -93,7 +99,7 @@ struct ContentView: View {
         let tab = state.openTabs[index]
         var pathToSave = tab.filePath
 
-        if tab.filePath == "untitled" {
+        if tab.filePath == EditorState.untitledPath {
             guard allowSaveAsForUntitled, let selectedPath = promptSavePath(defaultName: tab.fileName) else {
                 return
             }
@@ -105,6 +111,7 @@ struct ContentView: View {
             try FileService.shared.writeFile(path: pathToSave, content: state.openTabs[index].content)
             state.markTabSaved(at: index)
         } catch {
+            logger.error("Failed to save tab at path \(pathToSave, privacy: .public): \(error.localizedDescription, privacy: .public)")
             return
         }
     }
@@ -140,6 +147,7 @@ struct ContentView: View {
             let fileContent = try FileService.shared.readFile(path: fileURL.path)
             state.openFile(fileURL.path, content: fileContent)
         } catch {
+            logger.error("Failed to open file at path \(fileURL.path, privacy: .public): \(error.localizedDescription, privacy: .public)")
             return
         }
     }

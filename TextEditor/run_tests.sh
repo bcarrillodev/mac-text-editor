@@ -1,13 +1,9 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+set -euo pipefail
 
-echo "Building test library..."
-swiftc -c Tests/TextEditorTests/*.swift Sources/TextEditor/**/*.swift -o /tmp/test_build/ 2>&1 | head -50
-
-echo "Tests would run here in a full xcodebuild environment."
-echo "Since we're in CLT mode, let's validate the code structure instead."
+echo "Building package..."
+swift build
 
 echo ""
-echo "✅ FILE STRUCTURE VERIFIED"
-find Sources Tests -name "*.swift" | sort
-
+echo "Running package tests..."
+swift test

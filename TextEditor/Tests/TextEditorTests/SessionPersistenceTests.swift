@@ -1,73 +1,92 @@
-import XCTest
+import Foundation
+import Testing
 @testable import TextEditor
 
-class SessionPersistenceTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        SessionPersistenceService.shared.clearSession()
+@Suite("SessionPersistence")
+struct SessionPersistenceTests {
+    private func makeIsolatedService() -> (SessionPersistenceService, UserDefaults, String, String) {
+        let suiteName = "SessionPersistenceTests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        let key = "EditorSession.\(UUID().uuidString)"
+        let service = SessionPersistenceService(sessionKey: key, userDefaults: defaults)
+        return (service, defaults, key, suiteName)
     }
-    
-    override func tearDown() {
-        SessionPersistenceService.shared.clearSession()
-        super.tearDown()
-    }
-    
-    func testSaveSession() throws {
+
+    @Test("Save session")
+    func saveSession() throws {
+        let (service, defaults, key, suiteName) = makeIsolatedService()
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+
         let state = EditorState()
         state.openTabs = [
             FileDocument(filePath: "/tmp/file1.txt", content: "Content 1", fileName: "file1.txt"),
             FileDocument(filePath: "/tmp/file2.txt", content: "Content 2", fileName: "file2.txt")
         ]
         state.activeTabIndex = 1
-        
-        try SessionPersistenceService.shared.saveSession(state: state)
-        XCTAssertNotNil(UserDefaults.standard.data(forKey: "EditorSession"))
+
+        try service.saveSession(state: state)
+        #expect(defaults.data(forKey: key) != nil)
     }
-    
-    func testLoadSessionExists() throws {
+
+    @Test("Load session exists")
+    func loadSessionExists() throws {
+        let (service, defaults, _, suiteName) = makeIsolatedService()
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+
         let state = EditorState()
         state.openTabs = [
             FileDocument(filePath: "/tmp/file1.txt", content: "Content 1", fileName: "file1.txt")
         ]
         state.activeTabIndex = 0
-        
-        try SessionPersistenceService.shared.saveSession(state: state)
-        
-        let loadedState = SessionPersistenceService.shared.loadSession()
-        XCTAssertNotNil(loadedState)
-        XCTAssertEqual(loadedState?.openTabs.count, 1)
-        XCTAssertEqual(loadedState?.activeTabIndex, 0)
+
+        try service.saveSession(state: state)
+
+        let loadedState = service.loadSession()
+        #expect(loadedState != nil)
+        #expect(loadedState?.openTabs.count == 1)
+        #expect(loadedState?.activeTabIndex == 0)
     }
-    
-    func testLoadSessionNone() {
-        SessionPersistenceService.shared.clearSession()
-        let loadedState = SessionPersistenceService.shared.loadSession()
-        XCTAssertNil(loadedState)
+
+    @Test("Load session none")
+    func loadSessionNone() {
+        let (service, defaults, _, suiteName) = makeIsolatedService()
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+
+        let loadedState = service.loadSession()
+        #expect(loadedState == nil)
     }
-    
-    func testClearSession() throws {
+
+    @Test("Clear session")
+    func clearSession() throws {
+        let (service, defaults, key, suiteName) = makeIsolatedService()
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+
         let state = EditorState()
         state.openTabs = [
             FileDocument(filePath: "/tmp/file1.txt", content: "Content 1")
         ]
-        
-        try SessionPersistenceService.shared.saveSession(state: state)
-        XCTAssertNotNil(UserDefaults.standard.data(forKey: "EditorSession"))
-        
-        SessionPersistenceService.shared.clearSession()
-        XCTAssertNil(UserDefaults.standard.data(forKey: "EditorSession"))
+
+        try service.saveSession(state: state)
+        #expect(defaults.data(forKey: key) != nil)
+
+        service.clearSession()
+        #expect(defaults.data(forKey: key) == nil)
     }
-    
-    func testRestoreCursorPositions() throws {
+
+    @Test("Restore cursor positions")
+    func restoreCursorPositions() throws {
+        let (service, defaults, _, suiteName) = makeIsolatedService()
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+
         let state = EditorState()
         var doc = FileDocument(filePath: "/tmp/file1.txt", content: "Content 1")
         doc.cursorPosition = 42
         state.openTabs = [doc]
         state.activeTabIndex = 0
-        
-        try SessionPersistenceService.shared.saveSession(state: state)
-        
-        let loadedState = SessionPersistenceService.shared.loadSession()
-        XCTAssertEqual(loadedState?.openTabs.first?.cursorPosition, 42)
+
+        try service.saveSession(state: state)
+
+        let loadedState = service.loadSession()
+        #expect(loadedState?.openTabs.first?.cursorPosition == 42)
     }
 }
