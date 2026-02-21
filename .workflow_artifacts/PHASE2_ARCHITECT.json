@@ -1,0 +1,32 @@
+{
+  "phase": "architect",
+  "status": "ARCHITECTURE_READY",
+  "file_structure": {
+    "sources": [
+      "TextEditor/Sources/TextEditor/Models/EditorState.swift",
+      "TextEditor/Sources/TextEditor/Models/FileDocument.swift",
+      "TextEditor/Sources/TextEditor/Services/FileService.swift",
+      "TextEditor/Sources/TextEditor/Services/SessionPersistenceService.swift",
+      "TextEditor/Sources/TextEditor/Services/AutoSaveService.swift",
+      "TextEditor/Sources/TextEditor/Views/ContentView.swift",
+      "TextEditor/Sources/TextEditor/Views/EditorView.swift",
+      "TextEditor/Sources/TextEditor/Views/LineNumberView.swift",
+      "TextEditor/Sources/TextEditor/Views/TabBarView.swift",
+      "TextEditor/Sources/TextEditor/TextEditorApp.swift",
+      "TextEditor/Package.swift"
+    ],
+    "tests": [
+      "TextEditor/Tests/TextEditorTests/FileServiceTests.swift",
+      "TextEditor/Tests/TextEditorTests/SessionPersistenceTests.swift",
+      "TextEditor/Tests/TextEditorTests/EditorStateTests.swift"
+    ]
+  },
+  "design_patterns": [
+    "MVVM with SwiftUI",
+    "Dependency Injection for services",
+    "State management with @StateObject",
+    "File I/O abstraction layer"
+  ],
+  "persistence_strategy": "UserDefaults + FileManager",
+  "ui_framework": "SwiftUI + AppKit"
+}
