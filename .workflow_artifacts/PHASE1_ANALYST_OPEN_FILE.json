@@ -1,0 +1,18 @@
+{
+  "phase": "ANALYST",
+  "status": "STRUCTURED_REQUIREMENT",
+  "feature": "Open existing file via keyboard shortcut",
+  "user_story": "As a macOS text editor user, I want to open an existing text file with Cmd+O so I can load and edit files from disk quickly.",
+  "acceptance_criteria": [
+    "Cmd+O triggers a native file-open dialog",
+    "Selecting a file opens a tab containing the file's current text content",
+    "Opening a file already in tabs focuses that tab instead of creating a duplicate",
+    "Canceling the file-open dialog makes no state changes",
+    "Auto-save must not attempt to write placeholder untitled tabs"
+  ],
+  "out_of_scope": [
+    "Multiple file selection",
+    "Binary file detection",
+    "Unsaved-change confirmation dialogs"
+  ]
+}

@@ -5,12 +5,15 @@ class EditorState: ObservableObject {
     @Published var activeTabIndex: Int = 0
     @Published var unsavedChanges: [String: Bool] = [:]
     
-    func openFile(_ path: String) {
-        if !openTabs.contains(where: { $0.filePath == path }) {
-            let doc = FileDocument(filePath: path)
-            openTabs.append(doc)
-            activeTabIndex = openTabs.count - 1
+    func openFile(_ path: String, content: String = "") {
+        if let existingIndex = openTabs.firstIndex(where: { $0.filePath == path }) {
+            activeTabIndex = existingIndex
+            return
         }
+
+        let doc = FileDocument(filePath: path, content: content)
+        openTabs.append(doc)
+        activeTabIndex = openTabs.count - 1
     }
     
     func closeTab(at index: Int) {

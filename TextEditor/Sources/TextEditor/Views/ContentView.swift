@@ -1,4 +1,5 @@
 import SwiftUI
+import AppKit
 
 struct ContentView: View {
     @StateObject private var state = EditorState()
@@ -15,6 +16,17 @@ struct ContentView: View {
             EditorView(state: state)
         }
         .frame(minWidth: 600, minHeight: 400)
+        .toolbar {
+            ToolbarItemGroup {
+                Button {
+                    openFileFromDisk()
+                } label: {
+                    Image(systemName: "folder")
+                }
+                .keyboardShortcut("o", modifiers: .command)
+                .help("Open File")
+            }
+        }
         .onAppear {
             loadSession()
             startAutoSave()
@@ -38,6 +50,10 @@ struct ContentView: View {
             state.openTabs = savedState.openTabs
             state.activeTabIndex = savedState.activeTabIndex
         }
+
+        if state.openTabs.isEmpty {
+            state.openFile("untitled", content: "")
+        }
     }
     
     private func saveSession() {
@@ -48,12 +64,29 @@ struct ContentView: View {
         autoSaveService.startAutoSave { [weak state] in
             guard let state = state else { return }
             for tab in state.openTabs {
-                if tab.isModified {
+                if tab.isModified && tab.filePath != "untitled" {
                     try? FileService.shared.writeFile(path: tab.filePath, content: tab.content)
                 }
             }
             state.markAllSaved()
             try? SessionPersistenceService.shared.saveSession(state: state)
+        }
+    }
+
+    private func openFileFromDisk() {
+        let panel = NSOpenPanel()
+        panel.canChooseDirectories = false
+        panel.allowsMultipleSelection = false
+        panel.canChooseFiles = true
+        panel.title = "Open File"
+
+        guard panel.runModal() == .OK, let fileURL = panel.url else { return }
+
+        do {
+            let fileContent = try FileService.shared.readFile(path: fileURL.path)
+            state.openFile(fileURL.path, content: fileContent)
+        } catch {
+            return
         }
     }
 }

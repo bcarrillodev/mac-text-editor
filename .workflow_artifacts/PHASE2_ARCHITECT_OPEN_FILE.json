@@ -1,0 +1,15 @@
+{
+  "phase": "ARCHITECT",
+  "status": "ARCHITECTURE_READY",
+  "feature": "Open existing file via Cmd+O",
+  "edited_files": [
+    "TextEditor/Sources/TextEditor/Views/ContentView.swift",
+    "TextEditor/Sources/TextEditor/Models/EditorState.swift",
+    "TextEditor/Tests/TextEditorTests/EditorStateTests.swift"
+  ],
+  "contracts": {
+    "editor_state": "openFile(_ path: String, content: String = \"\") switches to existing tab or appends a new tab with provided content",
+    "content_view": "Adds toolbar open action and Cmd+O shortcut, uses NSOpenPanel and FileService.readFile"
+  },
+  "worker_prompt": "Implement Cmd+O file-open with native panel, load file text, avoid duplicate tabs, and keep existing autosave/session behavior intact."
+}
