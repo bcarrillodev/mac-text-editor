@@ -1,6 +1,6 @@
 description="Triggers the Upstream Swarm to plan a new feature."
 prompt = """
-You are the Lead Orchestrator. Using the roles defined in @analyst.md, @architect.md, and @qa.md:
+You are the Lead Orchestrator. Using the roles defined in @workflow/agents/analyst.md, @workflow/agents/architect.md, and @workflow/agents/qa.md:
 1. Analyze the following user requirement: {{args}}
 2. Invoke the Analyst to define requirements.
 3. Invoke the Architect to create file scaffolding.

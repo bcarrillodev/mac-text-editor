@@ -99,4 +99,41 @@ class EditorStateTests: XCTestCase {
         XCTAssertFalse(state.openTabs[1].isModified)
         XCTAssertEqual(state.unsavedChanges.count, 0)
     }
+
+    func testCloseTabRemovesUnsavedMarker() {
+        state.openFile("/tmp/file1.txt")
+        state.updateContent(tabIndex: 0, content: "content1")
+        XCTAssertTrue(state.unsavedChanges["/tmp/file1.txt"] ?? false)
+
+        state.closeTab(at: 0)
+
+        XCTAssertNil(state.unsavedChanges["/tmp/file1.txt"])
+    }
+
+    func testMarkTabSavedOnlyClearsSpecifiedTab() {
+        state.openFile("/tmp/file1.txt")
+        state.openFile("/tmp/file2.txt")
+        state.updateContent(tabIndex: 0, content: "content1")
+        state.updateContent(tabIndex: 1, content: "content2")
+
+        state.markTabSaved(at: 0)
+
+        XCTAssertFalse(state.openTabs[0].isModified)
+        XCTAssertTrue(state.openTabs[1].isModified)
+        XCTAssertNil(state.unsavedChanges["/tmp/file1.txt"])
+        XCTAssertTrue(state.unsavedChanges["/tmp/file2.txt"] ?? false)
+    }
+
+    func testUpdateTabPathMovesUnsavedMarker() {
+        state.createUntitledFile()
+        state.updateContent(tabIndex: 0, content: "Draft")
+        XCTAssertTrue(state.unsavedChanges["untitled"] ?? false)
+
+        state.updateTabPath(at: 0, newPath: "/tmp/saved.txt")
+
+        XCTAssertEqual(state.openTabs[0].filePath, "/tmp/saved.txt")
+        XCTAssertEqual(state.openTabs[0].fileName, "saved.txt")
+        XCTAssertNil(state.unsavedChanges["untitled"])
+        XCTAssertTrue(state.unsavedChanges["/tmp/saved.txt"] ?? false)
+    }
 }

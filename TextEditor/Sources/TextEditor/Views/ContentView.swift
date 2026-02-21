@@ -4,7 +4,7 @@ import AppKit
 struct ContentView: View {
     @StateObject private var state = EditorState()
     @StateObject private var autoSaveService = AutoSaveService()
-    
+
     var body: some View {
         VStack(spacing: 0) {
             TabBarView(
@@ -12,7 +12,7 @@ struct ContentView: View {
                 onClose: closeTab,
                 onSelect: selectTab
             )
-            
+
             EditorView(state: state)
         }
         .frame(minWidth: 600, minHeight: 400)
@@ -25,6 +25,18 @@ struct ContentView: View {
                 }
                 .keyboardShortcut("o", modifiers: .command)
                 .help("Open File")
+
+                Button("Save") {
+                    saveActiveTab()
+                }
+                .keyboardShortcut("s", modifiers: .command)
+
+                Button {
+                    state.createUntitledFile()
+                } label: {
+                    Image(systemName: "plus")
+                }
+                .help("New Tab")
             }
         }
         .onAppear {
@@ -36,15 +48,15 @@ struct ContentView: View {
             autoSaveService.stopAutoSave()
         }
     }
-    
+
     private func closeTab(_ index: Int) {
         state.closeTab(at: index)
     }
-    
+
     private func selectTab(_ index: Int) {
         state.switchToTab(index: index)
     }
-    
+
     private func loadSession() {
         if let savedState = SessionPersistenceService.shared.loadSession() {
             state.openTabs = savedState.openTabs
@@ -52,24 +64,65 @@ struct ContentView: View {
         }
 
         if state.openTabs.isEmpty {
-            state.openFile("untitled", content: "")
+            state.createUntitledFile()
         }
     }
-    
+
     private func saveSession() {
         try? SessionPersistenceService.shared.saveSession(state: state)
     }
-    
-    private func startAutoSave() {
-        autoSaveService.startAutoSave { [weak state] in
-            guard let state = state else { return }
-            for tab in state.openTabs {
-                if tab.isModified && tab.filePath != "untitled" {
-                    try? FileService.shared.writeFile(path: tab.filePath, content: tab.content)
-                }
+
+    private func saveActiveTab() {
+        guard state.activeTabIndex >= 0 && state.activeTabIndex < state.openTabs.count else { return }
+        saveTab(at: state.activeTabIndex, allowSaveAsForUntitled: true)
+        saveSession()
+    }
+
+    private func saveModifiedTabsForAutoSave() {
+        for index in state.openTabs.indices {
+            guard state.openTabs[index].isModified else { continue }
+            saveTab(at: index, allowSaveAsForUntitled: false)
+        }
+        saveSession()
+    }
+
+    private func saveTab(at index: Int, allowSaveAsForUntitled: Bool) {
+        guard index >= 0 && index < state.openTabs.count else { return }
+
+        let tab = state.openTabs[index]
+        var pathToSave = tab.filePath
+
+        if tab.filePath == "untitled" {
+            guard allowSaveAsForUntitled, let selectedPath = promptSavePath(defaultName: tab.fileName) else {
+                return
             }
-            state.markAllSaved()
-            try? SessionPersistenceService.shared.saveSession(state: state)
+            state.updateTabPath(at: index, newPath: selectedPath)
+            pathToSave = selectedPath
+        }
+
+        do {
+            try FileService.shared.writeFile(path: pathToSave, content: state.openTabs[index].content)
+            state.markTabSaved(at: index)
+        } catch {
+            return
+        }
+    }
+
+    private func promptSavePath(defaultName: String) -> String? {
+        let panel = NSSavePanel()
+        panel.canCreateDirectories = true
+        panel.nameFieldStringValue = defaultName
+        panel.title = "Save File"
+        panel.message = "Choose a location to save this file."
+
+        let response = panel.runModal()
+        guard response == .OK, let url = panel.url else { return nil }
+        return url.path
+    }
+
+    private func startAutoSave() {
+        autoSaveService.startAutoSave {
+            saveModifiedTabsForAutoSave()
         }
     }
 

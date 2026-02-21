@@ -1,12 +1,17 @@
 #!/bin/bash
 set -euo pipefail
 
+# Runs project tests for the current repo/worktree and emits a JSON control message.
+# Intended for use in an agent "fix until green" loop.
+
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 WORKFLOW_DIR="$(cd -- "$SCRIPT_DIR/.." && pwd)"
 REPO_DIR="$(cd -- "$WORKFLOW_DIR/.." && pwd)"
 
 run_tests() {
+  # mac-text-editor is a SwiftPM package in TextEditor/
   if [ -f "$REPO_DIR/TextEditor/Package.swift" ]; then
+    # Keep caches within the repo when running under restricted environments.
     local workflow_cache_dir="$REPO_DIR/.workflow_cache"
     mkdir -p "$workflow_cache_dir/xdg" "$workflow_cache_dir/clang/ModuleCache"
 
@@ -30,7 +35,7 @@ run_tests() {
     return $?
   fi
 
-  echo "No known test runner detected." >&2
+  echo "No known test runner detected (expected TextEditor/Package.swift, package.json, or pytest config)." >&2
   return 2
 }
 

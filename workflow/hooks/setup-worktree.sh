@@ -1,12 +1,27 @@
 #!/bin/bash
-# scripts/setup-worktree.sh
-BRANCH_NAME="task-$(date +%s)"
-WORKTREE_PATH="./worktrees/$BRANCH_NAME"
+set -euo pipefail
 
-echo "Creating worktree at $WORKTREE_PATH..."
-git worktree add -b "$BRANCH_NAME" "$WORKTREE_PATH" main
+# Creates a git worktree for an isolated feature/task branch.
+#
+# Usage:
+#   ./workflow/hooks/setup-worktree.sh [branch-name] [base-ref]
+#
+# Defaults:
+#   branch-name: task-<epoch>
+#   base-ref:    main
 
-# Copy the agent files into the worktree context if they aren't globally tracked
-cp agents/*.md "$WORKTREE_PATH/"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+WORKFLOW_DIR="$(cd -- "$SCRIPT_DIR/.." && pwd)"
+REPO_DIR="$(cd -- "$WORKFLOW_DIR/.." && pwd)"
 
-echo "Worktree ready. Initialize Worker loop in $WORKTREE_PATH."
+BRANCH_NAME="${1:-task-$(date +%s)}"
+BASE_REF="${2:-main}"
+WORKTREES_DIR="$REPO_DIR/worktrees"
+WORKTREE_PATH="$WORKTREES_DIR/$BRANCH_NAME"
+
+mkdir -p "$WORKTREES_DIR"
+
+echo "Creating worktree at $WORKTREE_PATH (branch: $BRANCH_NAME, base: $BASE_REF)..."
+git -C "$REPO_DIR" worktree add -b "$BRANCH_NAME" "$WORKTREE_PATH" "$BASE_REF"
+
+echo "Worktree ready at $WORKTREE_PATH."

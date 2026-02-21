@@ -4,12 +4,12 @@ struct EditorView: View {
     @ObservedObject var state: EditorState
     @State private var editorContent: String = ""
     @State private var lineCount: Int = 1
-    
+
     var body: some View {
         HStack(spacing: 0) {
-            if let activeTab = state.getActiveTab() {
+            if state.getActiveTab() != nil {
                 LineNumberView(lineCount: lineCount)
-                
+
                 TextEditor(text: $editorContent)
                     .font(.system(.body, design: .monospaced))
                     .onChange(of: editorContent) { newValue in
@@ -17,8 +17,10 @@ struct EditorView: View {
                         updateLineCount()
                     }
                     .onAppear {
-                        editorContent = activeTab.content
-                        updateLineCount()
+                        loadActiveTabContent()
+                    }
+                    .onChange(of: state.activeTabIndex) { _ in
+                        loadActiveTabContent()
                     }
             } else {
                 VStack {
@@ -31,8 +33,21 @@ struct EditorView: View {
         }
         .background(Color(NSColor.textBackgroundColor))
     }
-    
-    private func updateLineCount() {
-        lineCount = editorContent.split(separator: "\n", omittingEmptySubsequences: false).count
+
+    private func loadActiveTabContent() {
+        if let tab = state.getActiveTab() {
+            editorContent = tab.content
+            updateLineCount(for: tab.content)
+        }
+    }
+
+    private func updateLineCount(for content: String? = nil) {
+        let source = content ?? editorContent
+        let newlineCount = source.utf8.reduce(into: 0) { count, byte in
+            if byte == 10 {
+                count += 1
+            }
+        }
+        lineCount = max(1, newlineCount + 1)
     }
 }

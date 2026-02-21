@@ -6,9 +6,12 @@ class AutoSaveService: ObservableObject {
     
     func startAutoSave(callback: @escaping () -> Void) {
         stopAutoSave()
-        timer = Timer.scheduledTimer(withTimeInterval: saveInterval, repeats: true) { _ in
+        let nextTimer = Timer(timeInterval: saveInterval, repeats: true) { _ in
             callback()
         }
+        nextTimer.tolerance = min(1.0, saveInterval * 0.1)
+        RunLoop.main.add(nextTimer, forMode: .common)
+        timer = nextTimer
     }
     
     func stopAutoSave() {
