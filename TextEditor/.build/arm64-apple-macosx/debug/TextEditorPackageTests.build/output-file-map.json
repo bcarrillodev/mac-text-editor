@@ -1,0 +1,11 @@
+{
+  "": {
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorPackageTests.build/master.swiftdeps"
+  },
+  "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorPackageTests.derived/runner.swift": {
+    "dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorPackageTests.build/runner.d",
+    "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorPackageTests.build/runner.swift.o",
+    "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorPackageTests.build/runner~partial.swiftmodule",
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorPackageTests.build/runner.swiftdeps"
+  }
+}

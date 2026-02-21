@@ -1,0 +1,35 @@
+{
+  "": {
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/master.swiftdeps"
+  },
+  "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/AutoSaveIntegrationTests.swift": {
+    "dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/AutoSaveIntegrationTests.d",
+    "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/AutoSaveIntegrationTests.swift.o",
+    "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/AutoSaveIntegrationTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/AutoSaveIntegrationTests.swiftdeps"
+  },
+  "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/EditorStateTests.swift": {
+    "dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/EditorStateTests.d",
+    "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/EditorStateTests.swift.o",
+    "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/EditorStateTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/EditorStateTests.swiftdeps"
+  },
+  "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/EditorWorkflowTests.swift": {
+    "dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/EditorWorkflowTests.d",
+    "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/EditorWorkflowTests.swift.o",
+    "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/EditorWorkflowTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/EditorWorkflowTests.swiftdeps"
+  },
+  "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/FileServiceTests.swift": {
+    "dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/FileServiceTests.d",
+    "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/FileServiceTests.swift.o",
+    "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/FileServiceTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/FileServiceTests.swiftdeps"
+  },
+  "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/SessionPersistenceTests.swift": {
+    "dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/SessionPersistenceTests.d",
+    "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/SessionPersistenceTests.swift.o",
+    "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/SessionPersistenceTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/SessionPersistenceTests.swiftdeps"
+  }
+}

@@ -1,0 +1,10 @@
+/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Models/EditorState.swift
+/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Models/FileDocument.swift
+/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Services/AutoSaveService.swift
+/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Services/FileService.swift
+/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Services/SessionPersistenceService.swift
+/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/TextEditorApp.swift
+/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/ContentView.swift
+/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/EditorView.swift
+/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/LineNumberView.swift
+/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/TabBarView.swift

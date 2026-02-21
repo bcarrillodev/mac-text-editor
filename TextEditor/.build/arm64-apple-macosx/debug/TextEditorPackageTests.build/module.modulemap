@@ -1,0 +1,4 @@
+module TextEditorPackageTests {
+    header "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorPackageTests.build/TextEditorPackageTests-Swift.h"
+    requires objc
+}
