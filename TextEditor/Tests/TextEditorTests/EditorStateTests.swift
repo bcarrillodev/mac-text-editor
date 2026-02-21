@@ -136,4 +136,47 @@ class EditorStateTests: XCTestCase {
         XCTAssertNil(state.unsavedChanges["untitled"])
         XCTAssertTrue(state.unsavedChanges["/tmp/saved.txt"] ?? false)
     }
+
+    func testFindMatchCountCaseSensitive() {
+        state.openFile("/tmp/file1.txt", content: "Hello hello HELLO")
+
+        XCTAssertEqual(state.findMatchCount(inActiveTab: "Hello"), 1)
+        XCTAssertEqual(state.findMatchCount(inActiveTab: "hello"), 1)
+        XCTAssertEqual(state.findMatchCount(inActiveTab: "HELLO"), 1)
+    }
+
+    func testFindMatchCountCaseInsensitive() {
+        state.openFile("/tmp/file1.txt", content: "Hello hello HELLO")
+
+        XCTAssertEqual(state.findMatchCount(inActiveTab: "hello", caseSensitive: false), 3)
+    }
+
+    func testReplaceNextInActiveTab() {
+        state.openFile("/tmp/file1.txt", content: "cat cat cat")
+
+        let replaced = state.replaceNextInActiveTab(find: "cat", with: "dog")
+
+        XCTAssertTrue(replaced)
+        XCTAssertEqual(state.openTabs[0].content, "dog cat cat")
+        XCTAssertTrue(state.openTabs[0].isModified)
+    }
+
+    func testReplaceAllInActiveTab() {
+        state.openFile("/tmp/file1.txt", content: "cat cat cat")
+
+        let replacedCount = state.replaceAllInActiveTab(find: "cat", with: "dog")
+
+        XCTAssertEqual(replacedCount, 3)
+        XCTAssertEqual(state.openTabs[0].content, "dog dog dog")
+        XCTAssertTrue(state.openTabs[0].isModified)
+    }
+
+    func testReplaceAllInActiveTabNoMatch() {
+        state.openFile("/tmp/file1.txt", content: "cat cat cat")
+
+        let replacedCount = state.replaceAllInActiveTab(find: "bird", with: "dog")
+
+        XCTAssertEqual(replacedCount, 0)
+        XCTAssertEqual(state.openTabs[0].content, "cat cat cat")
+    }
 }

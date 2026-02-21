@@ -6,5 +6,7 @@
 /Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/TextEditorApp.swift
 /Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/ContentView.swift
 /Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/EditorView.swift
+/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/FindReplaceBar.swift
 /Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/LineNumberView.swift
+/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/NativeTextEditor.swift
 /Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/TabBarView.swift

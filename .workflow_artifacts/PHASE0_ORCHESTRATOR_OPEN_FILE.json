@@ -1,7 +1,0 @@
-{
-  "phase": "ORCHESTRATOR",
-  "status": "WORKTREE_PROVISIONED",
-  "worktree_path": "worktrees/feature-open-file-cmd-o",
-  "branch": "feature-open-file-cmd-o",
-  "sequence": ["ANALYST", "ARCHITECT", "QA", "WORKER", "REVIEWER"]
-}

@@ -1,3 +1,0 @@
-[agents]
-path = "./agents/*.md"
-auto_load = true

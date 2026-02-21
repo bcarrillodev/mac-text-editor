@@ -42,6 +42,7 @@ struct ContentView: View {
         .onAppear {
             loadSession()
             startAutoSave()
+            activateAppWindow()
         }
         .onDisappear {
             saveSession()
@@ -140,6 +141,13 @@ struct ContentView: View {
             state.openFile(fileURL.path, content: fileContent)
         } catch {
             return
+        }
+    }
+
+    private func activateAppWindow() {
+        DispatchQueue.main.async {
+            NSApp.activate(ignoringOtherApps: true)
+            NSApp.windows.first { $0.canBecomeKey }?.makeKeyAndOrderFront(nil)
         }
     }
 }

@@ -1,0 +1,255 @@
+import SwiftUI
+import AppKit
+
+struct NativeTextEditor: NSViewRepresentable {
+    @Binding var text: String
+    @Binding var lineStartOffsets: [CGFloat]
+    @Binding var scrollOffset: CGFloat
+    @Binding var lineHeight: CGFloat
+    @Binding var fontSize: CGFloat
+    @Binding var topInset: CGFloat
+    var requestFocus: Bool = false
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(
+            text: $text,
+            lineStartOffsets: $lineStartOffsets,
+            scrollOffset: $scrollOffset,
+            lineHeight: $lineHeight,
+            fontSize: $fontSize,
+            topInset: $topInset
+        )
+    }
+
+    func makeNSView(context: Context) -> NSScrollView {
+        let scrollView = NSTextView.scrollableTextView()
+        guard let textView = scrollView.documentView as? NSTextView else {
+            return scrollView
+        }
+
+        textView.isEditable = true
+        textView.isSelectable = true
+        textView.isRichText = false
+        textView.importsGraphics = false
+        textView.usesFindBar = true
+        textView.font = .monospacedSystemFont(ofSize: NSFont.systemFontSize, weight: .regular)
+        if let editorFont = textView.font {
+            textView.typingAttributes[.font] = editorFont
+        }
+        textView.backgroundColor = .textBackgroundColor
+        textView.delegate = context.coordinator
+        textView.string = text
+        textView.textContainerInset = NSSize(width: 4, height: 6)
+        context.coordinator.textView = textView
+        context.coordinator.bindScrollObservation(to: scrollView)
+        context.coordinator.updateMetrics(from: textView)
+
+        DispatchQueue.main.async {
+            if requestFocus {
+                textView.window?.makeFirstResponder(textView)
+            }
+        }
+
+        return scrollView
+    }
+
+    func updateNSView(_ nsView: NSScrollView, context: Context) {
+        guard let textView = (nsView.documentView as? NSTextView) ?? context.coordinator.textView else { return }
+        context.coordinator.textView = textView
+        context.coordinator.updateMetrics(from: textView)
+
+        if textView.string != text {
+            let previousSelection = textView.selectedRange()
+            textView.string = text
+            if let editorFont = textView.font {
+                textView.typingAttributes[.font] = editorFont
+            }
+            let maxLocation = (text as NSString).length
+            let clampedLocation = min(previousSelection.location, maxLocation)
+            let clampedLength = min(previousSelection.length, max(0, maxLocation - clampedLocation))
+            let updatedSelection = NSRange(location: clampedLocation, length: clampedLength)
+            textView.setSelectedRange(updatedSelection)
+            textView.scrollRangeToVisible(updatedSelection)
+        }
+
+        if requestFocus && textView.window?.firstResponder !== textView {
+            DispatchQueue.main.async {
+                textView.window?.makeFirstResponder(textView)
+            }
+        }
+    }
+
+    final class Coordinator: NSObject, NSTextViewDelegate {
+        @Binding var text: String
+        @Binding var lineStartOffsets: [CGFloat]
+        @Binding var scrollOffset: CGFloat
+        @Binding var lineHeight: CGFloat
+        @Binding var fontSize: CGFloat
+        @Binding var topInset: CGFloat
+        weak var textView: NSTextView?
+        weak var observedScrollView: NSScrollView?
+        private var lastObservedContentWidth: CGFloat = 0
+
+        init(
+            text: Binding<String>,
+            lineStartOffsets: Binding<[CGFloat]>,
+            scrollOffset: Binding<CGFloat>,
+            lineHeight: Binding<CGFloat>,
+            fontSize: Binding<CGFloat>,
+            topInset: Binding<CGFloat>
+        ) {
+            _text = text
+            _lineStartOffsets = lineStartOffsets
+            _scrollOffset = scrollOffset
+            _lineHeight = lineHeight
+            _fontSize = fontSize
+            _topInset = topInset
+        }
+
+        func textDidChange(_ notification: Notification) {
+            guard let textView else { return }
+            text = textView.string
+            updateLineStartOffsets(from: textView)
+            textView.scrollRangeToVisible(textView.selectedRange())
+        }
+
+        func bindScrollObservation(to scrollView: NSScrollView) {
+            guard observedScrollView !== scrollView else { return }
+            if let existing = observedScrollView {
+                NotificationCenter.default.removeObserver(
+                    self,
+                    name: NSView.boundsDidChangeNotification,
+                    object: existing.contentView
+                )
+            }
+
+            observedScrollView = scrollView
+            scrollView.contentView.postsBoundsChangedNotifications = true
+            lastObservedContentWidth = scrollView.contentView.bounds.width
+            scrollOffset = scrollView.contentView.bounds.origin.y
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(handleClipViewBoundsChange(_:)),
+                name: NSView.boundsDidChangeNotification,
+                object: scrollView.contentView
+            )
+        }
+
+        func updateMetrics(from textView: NSTextView) {
+            guard let layoutManager = textView.layoutManager else { return }
+            let font = textView.font ?? .monospacedSystemFont(ofSize: NSFont.systemFontSize, weight: .regular)
+            lineHeight = layoutManager.defaultLineHeight(for: font)
+            fontSize = font.pointSize
+            topInset = textView.textContainerInset.height
+            updateLineStartOffsets(from: textView)
+        }
+
+        private func updateLineStartOffsets(from textView: NSTextView) {
+            guard
+                let layoutManager = textView.layoutManager,
+                let textContainer = textView.textContainer
+            else {
+                return
+            }
+
+            layoutManager.ensureLayout(for: textContainer)
+
+            let textOriginY = textView.textContainerOrigin.y
+            let currentText = textView.string as NSString
+            let textLength = currentText.length
+            let startIndices = Self.logicalLineStartIndices(in: currentText)
+            var offsets: [CGFloat] = []
+            offsets.reserveCapacity(startIndices.count)
+
+            for startIndex in startIndices {
+                let y: CGFloat
+                if startIndex < textLength {
+                    let glyphIndex = layoutManager.glyphIndexForCharacter(at: startIndex)
+                    let rect = layoutManager.lineFragmentRect(
+                        forGlyphAt: glyphIndex,
+                        effectiveRange: nil,
+                        withoutAdditionalLayout: false
+                    )
+                    y = textOriginY + rect.minY
+                } else {
+                    let extraLineRect = layoutManager.extraLineFragmentRect
+                    if !extraLineRect.isEmpty {
+                        y = textOriginY + extraLineRect.minY
+                    } else if let previous = offsets.last {
+                        y = previous + max(1, lineHeight)
+                    } else {
+                        y = textOriginY
+                    }
+                }
+                offsets.append(y)
+            }
+
+            if offsets.isEmpty {
+                offsets = [textOriginY]
+            }
+
+            if Self.hasMeaningfulDifference(lhs: offsets, rhs: lineStartOffsets) {
+                lineStartOffsets = offsets
+            }
+        }
+
+        private static func logicalLineStartIndices(in string: NSString) -> [Int] {
+            let length = string.length
+            guard length > 0 else {
+                return [0]
+            }
+
+            var starts = [0]
+            var searchLocation = 0
+
+            while searchLocation < length {
+                let searchRange = NSRange(location: searchLocation, length: length - searchLocation)
+                let newlineRange = string.range(of: "\n", options: [], range: searchRange)
+                if newlineRange.location == NSNotFound {
+                    break
+                }
+
+                let nextLocation = newlineRange.location + newlineRange.length
+                starts.append(nextLocation)
+                searchLocation = nextLocation
+            }
+
+            return starts
+        }
+
+        private static func hasMeaningfulDifference(lhs: [CGFloat], rhs: [CGFloat]) -> Bool {
+            guard lhs.count == rhs.count else {
+                return true
+            }
+
+            for index in lhs.indices where abs(lhs[index] - rhs[index]) > 0.25 {
+                return true
+            }
+
+            return false
+        }
+
+        @objc private func handleClipViewBoundsChange(_ notification: Notification) {
+            guard let clipView = notification.object as? NSClipView else { return }
+            scrollOffset = clipView.bounds.origin.y
+
+            let width = clipView.bounds.width
+            if abs(width - lastObservedContentWidth) > 0.25 {
+                lastObservedContentWidth = width
+                if let textView {
+                    updateLineStartOffsets(from: textView)
+                }
+            }
+        }
+
+        deinit {
+            if let observedScrollView {
+                NotificationCenter.default.removeObserver(
+                    self,
+                    name: NSView.boundsDidChangeNotification,
+                    object: observedScrollView.contentView
+                )
+            }
+        }
+    }
+}

@@ -32,11 +32,10 @@ class EditorState: ObservableObject {
     }
     
     func updateContent(tabIndex: Int, content: String) {
-        guard tabIndex >= 0 && tabIndex < openTabs.count else { return }
+        guard isValidTabIndex(tabIndex) else { return }
         guard openTabs[tabIndex].content != content else { return }
         openTabs[tabIndex].content = content
-        openTabs[tabIndex].isModified = true
-        unsavedChanges[openTabs[tabIndex].filePath] = true
+        markTabModified(at: tabIndex)
     }
     
     func getActiveTab() -> FileDocument? {
@@ -75,5 +74,59 @@ class EditorState: ObservableObject {
         if wasUnsaved {
             unsavedChanges[newPath] = true
         }
+    }
+
+    func findMatchCount(inActiveTab query: String, caseSensitive: Bool = true) -> Int {
+        guard !query.isEmpty else { return 0 }
+        guard let tab = getActiveTab() else { return 0 }
+
+        let options: String.CompareOptions = caseSensitive ? [] : [.caseInsensitive]
+        var count = 0
+        var searchRange = tab.content.startIndex..<tab.content.endIndex
+
+        while let range = tab.content.range(of: query, options: options, range: searchRange) {
+            count += 1
+            searchRange = range.upperBound..<tab.content.endIndex
+        }
+
+        return count
+    }
+
+    @discardableResult
+    func replaceAllInActiveTab(find query: String, with replacement: String, caseSensitive: Bool = true) -> Int {
+        guard !query.isEmpty else { return 0 }
+        guard isValidTabIndex(activeTabIndex) else { return 0 }
+
+        let options: String.CompareOptions = caseSensitive ? [] : [.caseInsensitive]
+        let matchCount = findMatchCount(inActiveTab: query, caseSensitive: caseSensitive)
+        guard matchCount > 0 else { return 0 }
+
+        let updated = openTabs[activeTabIndex].content.replacingOccurrences(of: query, with: replacement, options: options)
+        updateContent(tabIndex: activeTabIndex, content: updated)
+        return matchCount
+    }
+
+    @discardableResult
+    func replaceNextInActiveTab(find query: String, with replacement: String, caseSensitive: Bool = true) -> Bool {
+        guard !query.isEmpty else { return false }
+        guard isValidTabIndex(activeTabIndex) else { return false }
+
+        let options: String.CompareOptions = caseSensitive ? [] : [.caseInsensitive]
+        let original = openTabs[activeTabIndex].content
+        guard let range = original.range(of: query, options: options) else { return false }
+
+        var updated = original
+        updated.replaceSubrange(range, with: replacement)
+        updateContent(tabIndex: activeTabIndex, content: updated)
+        return true
+    }
+
+    private func isValidTabIndex(_ index: Int) -> Bool {
+        index >= 0 && index < openTabs.count
+    }
+
+    private func markTabModified(at index: Int) {
+        openTabs[index].isModified = true
+        unsavedChanges[openTabs[index].filePath] = true
     }
 }

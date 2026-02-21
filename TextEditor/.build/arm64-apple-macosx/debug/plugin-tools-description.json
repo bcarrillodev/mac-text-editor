@@ -60,7 +60,15 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/FindReplaceBar.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/LineNumberView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/NativeTextEditor.swift"
         },
         {
           "kind" : "file",
@@ -87,7 +95,9 @@
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/TextEditorApp.swift.o",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/ContentView.swift.o",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/EditorView.swift.o",
+        "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/FindReplaceBar.swift.o",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/LineNumberView.swift.o",
+        "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/NativeTextEditor.swift.o",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/TabBarView.swift.o"
       ],
       "otherArguments" : [
@@ -108,7 +118,6 @@
         "-entry-point-function-name",
         "-Xfrontend",
         "TextEditor_main",
-        "-color-diagnostics",
         "-swift-version",
         "5",
         "-F",
@@ -161,7 +170,15 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/FindReplaceBar.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/LineNumberView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/NativeTextEditor.swift.o"
         },
         {
           "kind" : "file",
@@ -182,7 +199,9 @@
         "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/TextEditorApp.swift",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/ContentView.swift",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/EditorView.swift",
+        "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/FindReplaceBar.swift",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/LineNumberView.swift",
+        "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/NativeTextEditor.swift",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/TabBarView.swift"
       ],
       "tempsPath" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build",
@@ -236,7 +255,6 @@
         "-emit-objc-header",
         "-emit-objc-header-path",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorPackageTests.build/TextEditorPackageTests-Swift.h",
-        "-color-diagnostics",
         "-F",
         "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
         "-sdk",
@@ -334,7 +352,6 @@
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/ModuleCache",
         "-parseable-output",
         "-parse-as-library",
-        "-color-diagnostics",
         "-swift-version",
         "5",
         "-F",
@@ -408,7 +425,9 @@
       "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/TextEditorApp.swift",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/ContentView.swift",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/EditorView.swift",
+      "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/FindReplaceBar.swift",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/LineNumberView.swift",
+      "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/NativeTextEditor.swift",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/TabBarView.swift",
       "-I",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/Modules",
@@ -429,7 +448,6 @@
       "-entry-point-function-name",
       "-Xfrontend",
       "TextEditor_main",
-      "-color-diagnostics",
       "-swift-version",
       "5",
       "-F",
@@ -476,7 +494,6 @@
       "-emit-objc-header",
       "-emit-objc-header-path",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorPackageTests.build/TextEditorPackageTests-Swift.h",
-      "-color-diagnostics",
       "-F",
       "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
       "-sdk",
@@ -522,7 +539,6 @@
       "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/ModuleCache",
       "-parseable-output",
       "-parse-as-library",
-      "-color-diagnostics",
       "-swift-version",
       "5",
       "-F",
@@ -629,7 +645,15 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/FindReplaceBar.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/LineNumberView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/NativeTextEditor.swift"
         },
         {
           "kind" : "file",
@@ -671,7 +695,15 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/FindReplaceBar.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/LineNumberView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/NativeTextEditor.swift.o"
         },
         {
           "kind" : "file",
@@ -735,7 +767,15 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/FindReplaceBar.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/LineNumberView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/NativeTextEditor.swift.o"
         },
         {
           "kind" : "file",

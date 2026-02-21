@@ -1,9 +1,0 @@
-{
-  "phase": "QA",
-  "status": "TESTS_WRITTEN",
-  "tests_added": [
-    "EditorStateTests.testOpenFile verifies path + loaded content",
-    "EditorStateTests.testOpenDuplicateFileSwitchesToExistingTab verifies dedupe and tab focus"
-  ],
-  "expected_worker_signal": "stop when test loop is green"
-}
