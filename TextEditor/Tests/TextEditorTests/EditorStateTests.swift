@@ -10,9 +10,10 @@ class EditorStateTests: XCTestCase {
     }
     
     func testOpenFile() {
-        state.openFile("/tmp/file1.txt")
+        state.openFile("/tmp/file1.txt", content: "Hello")
         XCTAssertEqual(state.openTabs.count, 1)
         XCTAssertEqual(state.openTabs[0].filePath, "/tmp/file1.txt")
+        XCTAssertEqual(state.openTabs[0].content, "Hello")
         XCTAssertEqual(state.activeTabIndex, 0)
     }
     
@@ -27,6 +28,17 @@ class EditorStateTests: XCTestCase {
         state.openFile("/tmp/file1.txt")
         state.openFile("/tmp/file1.txt")
         XCTAssertEqual(state.openTabs.count, 1)
+    }
+
+    func testOpenDuplicateFileSwitchesToExistingTab() {
+        state.openFile("/tmp/file1.txt")
+        state.openFile("/tmp/file2.txt")
+        XCTAssertEqual(state.activeTabIndex, 1)
+
+        state.openFile("/tmp/file1.txt")
+
+        XCTAssertEqual(state.openTabs.count, 2)
+        XCTAssertEqual(state.activeTabIndex, 0)
     }
     
     func testCloseTab() {
