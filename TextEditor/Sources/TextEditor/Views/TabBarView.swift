@@ -1,22 +1,26 @@
 import SwiftUI
+import AppKit
 
 struct TabBarView: View {
     @ObservedObject var state: EditorState
     var onClose: (Int) -> Void
     var onSelect: (Int) -> Void
     var onAddTab: () -> Void
-    private let estimatedTabWidth: CGFloat = 150
     private let addButtonWidth: CGFloat = 34
     private let overflowButtonWidth: CGFloat = 36
     
     var body: some View {
         GeometryReader { geometry in
-            let visibleCount = maxVisibleTabCount(for: geometry.size.width)
-            let visibleIndices = Array(state.openTabs.indices.prefix(visibleCount))
-            let overflowIndices = Array(state.openTabs.indices.dropFirst(visibleCount))
+            let tabWidths = state.openTabs.map(TabBarViewLayout.estimatedWidth)
+            let layout = TabBarViewLayout.computeVisibleAndOverflowIndices(
+                availableWidth: geometry.size.width,
+                tabWidths: tabWidths,
+                addButtonWidth: addButtonWidth,
+                overflowButtonWidth: overflowButtonWidth
+            )
 
             HStack(spacing: 0) {
-                ForEach(visibleIndices, id: \.self) { index in
+                ForEach(layout.visibleIndices, id: \.self) { index in
                     TabItem(
                         tab: state.openTabs[index],
                         isActive: state.activeTabIndex == index,
@@ -25,9 +29,9 @@ struct TabBarView: View {
                     )
                 }
 
-                if !overflowIndices.isEmpty {
+                if !layout.overflowIndices.isEmpty {
                     Menu {
-                        ForEach(overflowIndices, id: \.self) { index in
+                        ForEach(layout.overflowIndices, id: \.self) { index in
                             Button {
                                 onSelect(index)
                             } label: {
@@ -60,11 +64,55 @@ struct TabBarView: View {
         .background(Color(NSColor.controlBackgroundColor))
         .border(Color.gray.opacity(0.3), width: 1)
     }
+}
 
-    private func maxVisibleTabCount(for width: CGFloat) -> Int {
-        let reservedWidth = addButtonWidth + overflowButtonWidth
-        let availableWidth = max(0, width - reservedWidth)
-        return Int(availableWidth / estimatedTabWidth)
+struct TabBarViewLayout {
+    static func computeVisibleAndOverflowIndices(
+        availableWidth: CGFloat,
+        tabWidths: [CGFloat],
+        addButtonWidth: CGFloat,
+        overflowButtonWidth: CGFloat
+    ) -> (visibleIndices: [Int], overflowIndices: [Int]) {
+        let allIndices = Array(tabWidths.indices)
+        guard !allIndices.isEmpty else { return ([], []) }
+
+        let fullFitCount = fittedPrefixCount(
+            availableWidth: max(0, availableWidth - addButtonWidth),
+            tabWidths: tabWidths
+        )
+        if fullFitCount == tabWidths.count {
+            return (allIndices, [])
+        }
+
+        let overflowFitCount = fittedPrefixCount(
+            availableWidth: max(0, availableWidth - addButtonWidth - overflowButtonWidth),
+            tabWidths: tabWidths
+        )
+        return (
+            Array(allIndices.prefix(overflowFitCount)),
+            Array(allIndices.dropFirst(overflowFitCount))
+        )
+    }
+
+    static func estimatedWidth(for tab: FileDocument) -> CGFloat {
+        let font = NSFont.monospacedSystemFont(ofSize: NSFont.systemFontSize(for: .small), weight: .regular)
+        let textWidth = (tab.fileName as NSString).size(withAttributes: [.font: font]).width
+        let modifiedDotWidth: CGFloat = tab.isModified ? 12 : 0
+        let closeButtonWidth: CGFloat = 14
+        let spacingWidth: CGFloat = tab.isModified ? 16 : 10
+        let horizontalPadding: CGFloat = 16
+        return textWidth + modifiedDotWidth + closeButtonWidth + spacingWidth + horizontalPadding
+    }
+
+    private static func fittedPrefixCount(availableWidth: CGFloat, tabWidths: [CGFloat]) -> Int {
+        var usedWidth: CGFloat = 0
+        var count = 0
+        for width in tabWidths {
+            if usedWidth + width > availableWidth { break }
+            usedWidth += width
+            count += 1
+        }
+        return count
     }
 }
 
