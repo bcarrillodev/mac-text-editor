@@ -4,6 +4,7 @@ struct TabBarView: View {
     @ObservedObject var state: EditorState
     var onClose: (Int) -> Void
     var onSelect: (Int) -> Void
+    var onAddTab: () -> Void
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -16,6 +17,13 @@ struct TabBarView: View {
                         onClose: { onClose(index) }
                     )
                 }
+
+                Button(action: onAddTab) {
+                    Image(systemName: "plus")
+                }
+                .buttonStyle(.plain)
+                .padding(.horizontal, 10)
+                .help("New Tab")
             }
         }
         .frame(height: 36)

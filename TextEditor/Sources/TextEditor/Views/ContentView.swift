@@ -12,7 +12,8 @@ struct ContentView: View {
             TabBarView(
                 state: state,
                 onClose: closeTab,
-                onSelect: selectTab
+                onSelect: selectTab,
+                onAddTab: state.createUntitledFile
             )
 
             EditorView(state: state)
@@ -33,12 +34,6 @@ struct ContentView: View {
                 }
                 .keyboardShortcut("s", modifiers: .command)
 
-                Button {
-                    state.createUntitledFile()
-                } label: {
-                    Image(systemName: "plus")
-                }
-                .help("New Tab")
             }
         }
         .onAppear {
