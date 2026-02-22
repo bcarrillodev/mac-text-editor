@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "workflow/contracts/data_contract.schema.v1.json",
+  "title": "DataContractV1",
+  "type": "object",
+  "required": ["schema_version", "feature_id", "allowed_files"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "feature_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "allowed_files": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "worker_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "quality_gates": {
+      "type": "object",
+      "required": ["tests_required", "coverage_threshold"],
+      "properties": {
+        "tests_required": {
+          "type": "boolean"
+        },
+        "lint_required": {
+          "type": "boolean"
+        },
+        "typecheck_required": {
+          "type": "boolean"
+        },
+        "coverage_threshold": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

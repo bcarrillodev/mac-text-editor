@@ -6,6 +6,8 @@ struct TabBarView: View {
     var onClose: (Int) -> Void
     var onSelect: (Int) -> Void
     var onAddTab: () -> Void
+    var onOpenFile: () -> Void
+    var onSave: () -> Void
     private let addButtonWidth: CGFloat = 34
     private let overflowButtonWidth: CGFloat = 36
     
@@ -13,7 +15,7 @@ struct TabBarView: View {
         GeometryReader { geometry in
             let tabWidths = state.openTabs.map(TabBarViewLayout.estimatedWidth)
             let layout = TabBarViewLayout.computeVisibleAndOverflowIndices(
-                availableWidth: geometry.size.width,
+                availableWidth: max(0, geometry.size.width),
                 tabWidths: tabWidths,
                 addButtonWidth: addButtonWidth,
                 overflowButtonWidth: overflowButtonWidth
@@ -58,9 +60,26 @@ struct TabBarView: View {
                 .help("New Tab")
 
                 Spacer(minLength: 0)
+
+                HStack(spacing: 6) {
+                    Button("Open") {
+                        onOpenFile()
+                    }
+                    .buttonStyle(.plain)
+                    .keyboardShortcut("o", modifiers: .command)
+                    .help("Open File")
+
+                    Button("Save") {
+                        onSave()
+                    }
+                    .buttonStyle(.plain)
+                    .keyboardShortcut("s", modifiers: .command)
+                    .help("Save")
+                }
+                .padding(.trailing, 10)
             }
         }
-        .frame(height: 36)
+        .frame(height: 24)
         .background(Color(NSColor.controlBackgroundColor))
         .border(Color.gray.opacity(0.3), width: 1)
     }

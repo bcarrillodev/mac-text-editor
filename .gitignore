@@ -9,3 +9,7 @@ DerivedData/
 *.xcworkspace
 *.xcuserstate
 *.xcuserdata/
+
+# Workflow runtime artifacts
+.workflow/runs/
+.workflow/artifacts/

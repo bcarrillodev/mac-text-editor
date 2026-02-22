@@ -314,6 +314,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/TabBarViewLayoutTests.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
         },
         {
@@ -333,7 +337,8 @@
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/EditorStateTests.swift.o",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/EditorWorkflowTests.swift.o",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/FileServiceTests.swift.o",
-        "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/SessionPersistenceTests.swift.o"
+        "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/SessionPersistenceTests.swift.o",
+        "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/TabBarViewLayoutTests.swift.o"
       ],
       "otherArguments" : [
         "-target",
@@ -392,6 +397,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/TabBarViewLayoutTests.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/Modules/TextEditorTests.swiftmodule"
         }
       ],
@@ -401,7 +410,8 @@
         "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/EditorStateTests.swift",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/EditorWorkflowTests.swift",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/FileServiceTests.swift",
-        "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/SessionPersistenceTests.swift"
+        "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/SessionPersistenceTests.swift",
+        "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/TabBarViewLayoutTests.swift"
       ],
       "tempsPath" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build",
       "wholeModuleOptimization" : false
@@ -521,6 +531,7 @@
       "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/EditorWorkflowTests.swift",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/FileServiceTests.swift",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/SessionPersistenceTests.swift",
+      "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/TabBarViewLayoutTests.swift",
       "-I",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/Modules",
       "-target",
@@ -812,6 +823,10 @@
         {
           "kind" : "file",
           "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/SessionPersistenceTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/TabBarViewLayoutTests.swift.o"
         }
       ],
       "outputFilePath" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorPackageTests.product/Objects.LinkFileList"
@@ -842,6 +857,10 @@
         {
           "kind" : "file",
           "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/SessionPersistenceTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/TabBarViewLayoutTests.swift"
         }
       ],
       "outputFilePath" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/sources"

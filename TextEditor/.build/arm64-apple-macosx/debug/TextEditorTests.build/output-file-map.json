@@ -31,5 +31,11 @@
     "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/SessionPersistenceTests.swift.o",
     "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/SessionPersistenceTests~partial.swiftmodule",
     "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/SessionPersistenceTests.swiftdeps"
+  },
+  "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/TabBarViewLayoutTests.swift": {
+    "dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/TabBarViewLayoutTests.d",
+    "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/TabBarViewLayoutTests.swift.o",
+    "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/TabBarViewLayoutTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/TabBarViewLayoutTests.swiftdeps"
   }
 }

@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "workflow/contracts/feature_request.schema.v1.json",
+  "title": "FeatureRequestV1",
+  "type": "object",
+  "required": ["schema_version", "type"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["STRUCTURED_REQUIREMENT", "CLARIFICATION_REQUIRED"]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "STRUCTURED_REQUIREMENT"
+          }
+        }
+      },
+      "then": {
+        "required": ["user_story", "acceptance_criteria", "out_of_scope"],
+        "properties": {
+          "user_story": {
+            "type": "string",
+            "minLength": 1
+          },
+          "acceptance_criteria": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          },
+          "out_of_scope": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "CLARIFICATION_REQUIRED"
+          }
+        }
+      },
+      "then": {
+        "required": ["questions"],
+        "properties": {
+          "questions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "maxItems": 3
+          }
+        }
+      }
+    }
+  ]
+}

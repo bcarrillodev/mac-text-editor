@@ -13,29 +13,14 @@ struct ContentView: View {
                 state: state,
                 onClose: closeTab,
                 onSelect: selectTab,
-                onAddTab: state.createUntitledFile
+                onAddTab: state.createUntitledFile,
+                onOpenFile: openFileFromDisk,
+                onSave: saveActiveTab
             )
 
             EditorView(state: state)
         }
         .frame(minWidth: 600, minHeight: 400)
-        .toolbar {
-            ToolbarItemGroup {
-                Button {
-                    openFileFromDisk()
-                } label: {
-                    Image(systemName: "folder")
-                }
-                .keyboardShortcut("o", modifiers: .command)
-                .help("Open File")
-
-                Button("Save") {
-                    saveActiveTab()
-                }
-                .keyboardShortcut("s", modifiers: .command)
-
-            }
-        }
         .onAppear {
             loadSession()
             startAutoSave()
