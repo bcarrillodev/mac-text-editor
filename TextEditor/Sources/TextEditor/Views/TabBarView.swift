@@ -5,11 +5,18 @@ struct TabBarView: View {
     var onClose: (Int) -> Void
     var onSelect: (Int) -> Void
     var onAddTab: () -> Void
+    private let estimatedTabWidth: CGFloat = 150
+    private let addButtonWidth: CGFloat = 34
+    private let overflowButtonWidth: CGFloat = 36
     
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
+        GeometryReader { geometry in
+            let visibleCount = maxVisibleTabCount(for: geometry.size.width)
+            let visibleIndices = Array(state.openTabs.indices.prefix(visibleCount))
+            let overflowIndices = Array(state.openTabs.indices.dropFirst(visibleCount))
+
             HStack(spacing: 0) {
-                ForEach(state.openTabs.indices, id: \.self) { index in
+                ForEach(visibleIndices, id: \.self) { index in
                     TabItem(
                         tab: state.openTabs[index],
                         isActive: state.activeTabIndex == index,
@@ -18,17 +25,46 @@ struct TabBarView: View {
                     )
                 }
 
+                if !overflowIndices.isEmpty {
+                    Menu {
+                        ForEach(overflowIndices, id: \.self) { index in
+                            Button {
+                                onSelect(index)
+                            } label: {
+                                if state.activeTabIndex == index {
+                                    Label(state.openTabs[index].fileName, systemImage: "checkmark")
+                                } else {
+                                    Text(state.openTabs[index].fileName)
+                                }
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
+                    }
+                    .menuStyle(.borderlessButton)
+                    .frame(width: overflowButtonWidth)
+                    .help("More Tabs")
+                }
+
                 Button(action: onAddTab) {
                     Image(systemName: "plus")
                 }
                 .buttonStyle(.plain)
-                .padding(.horizontal, 10)
+                .frame(width: addButtonWidth)
                 .help("New Tab")
+
+                Spacer(minLength: 0)
             }
         }
         .frame(height: 36)
         .background(Color(NSColor.controlBackgroundColor))
         .border(Color.gray.opacity(0.3), width: 1)
+    }
+
+    private func maxVisibleTabCount(for width: CGFloat) -> Int {
+        let reservedWidth = addButtonWidth + overflowButtonWidth
+        let availableWidth = max(0, width - reservedWidth)
+        return Int(availableWidth / estimatedTabWidth)
     }
 }
 
