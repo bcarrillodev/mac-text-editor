@@ -65,14 +65,14 @@ struct TabBarView: View {
                     Button("Open") {
                         onOpenFile()
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(.bordered)
                     .keyboardShortcut("o", modifiers: .command)
                     .help("Open File")
 
                     Button("Save") {
                         onSave()
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(.bordered)
                     .keyboardShortcut("s", modifiers: .command)
                     .help("Save")
                 }

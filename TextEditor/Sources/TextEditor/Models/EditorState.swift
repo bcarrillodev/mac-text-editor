@@ -124,6 +124,11 @@ class EditorState: ObservableObject {
         return true
     }
 
+    func updateCursorPosition(tabIndex: Int, position: Int) {
+        guard isValidTabIndex(tabIndex) else { return }
+        openTabs[tabIndex].cursorPosition = position
+    }
+
     private func isValidTabIndex(_ index: Int) -> Bool {
         index >= 0 && index < openTabs.count
     }

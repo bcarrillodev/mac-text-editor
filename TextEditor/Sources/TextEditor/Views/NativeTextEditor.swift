@@ -8,6 +8,7 @@ struct NativeTextEditor: NSViewRepresentable {
     @Binding var lineHeight: CGFloat
     @Binding var fontSize: CGFloat
     @Binding var topInset: CGFloat
+    @Binding var cursorPosition: Int
     var requestFocus: Bool = false
 
     func makeCoordinator() -> Coordinator {
@@ -17,7 +18,8 @@ struct NativeTextEditor: NSViewRepresentable {
             scrollOffset: $scrollOffset,
             lineHeight: $lineHeight,
             fontSize: $fontSize,
-            topInset: $topInset
+            topInset: $topInset,
+            cursorPosition: $cursorPosition
         )
     }
 
@@ -59,15 +61,13 @@ struct NativeTextEditor: NSViewRepresentable {
         context.coordinator.updateMetrics(from: textView)
 
         if textView.string != text {
-            let previousSelection = textView.selectedRange()
             textView.string = text
             if let editorFont = textView.font {
                 textView.typingAttributes[.font] = editorFont
             }
             let maxLocation = (text as NSString).length
-            let clampedLocation = min(previousSelection.location, maxLocation)
-            let clampedLength = min(previousSelection.length, max(0, maxLocation - clampedLocation))
-            let updatedSelection = NSRange(location: clampedLocation, length: clampedLength)
+            let clampedLocation = min(cursorPosition, maxLocation)
+            let updatedSelection = NSRange(location: clampedLocation, length: 0)
             textView.setSelectedRange(updatedSelection)
             textView.scrollRangeToVisible(updatedSelection)
         }
@@ -86,6 +86,7 @@ struct NativeTextEditor: NSViewRepresentable {
         @Binding var lineHeight: CGFloat
         @Binding var fontSize: CGFloat
         @Binding var topInset: CGFloat
+        @Binding var cursorPosition: Int
         weak var textView: NSTextView?
         weak var observedScrollView: NSScrollView?
         private var lastObservedContentWidth: CGFloat = 0
@@ -96,7 +97,8 @@ struct NativeTextEditor: NSViewRepresentable {
             scrollOffset: Binding<CGFloat>,
             lineHeight: Binding<CGFloat>,
             fontSize: Binding<CGFloat>,
-            topInset: Binding<CGFloat>
+            topInset: Binding<CGFloat>,
+            cursorPosition: Binding<Int>
         ) {
             _text = text
             _lineStartOffsets = lineStartOffsets
@@ -104,13 +106,20 @@ struct NativeTextEditor: NSViewRepresentable {
             _lineHeight = lineHeight
             _fontSize = fontSize
             _topInset = topInset
+            _cursorPosition = cursorPosition
         }
 
         func textDidChange(_ notification: Notification) {
             guard let textView else { return }
             text = textView.string
+            cursorPosition = textView.selectedRange().location
             updateLineStartOffsets(from: textView)
             textView.scrollRangeToVisible(textView.selectedRange())
+        }
+
+        func textViewDidChangeSelection(_ notification: Notification) {
+            guard let textView else { return }
+            cursorPosition = textView.selectedRange().location
         }
 
         func bindScrollObservation(to scrollView: NSScrollView) {

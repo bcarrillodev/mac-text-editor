@@ -17,6 +17,7 @@ struct EditorView: View {
     @State private var editorLineHeight: CGFloat = 0
     @State private var editorFontSize: CGFloat = NSFont.systemFontSize
     @State private var editorTopInset: CGFloat = 6
+    @State private var editorCursorPosition: Int = 0
 
     var body: some View {
         VStack(spacing: 0) {
@@ -51,11 +52,16 @@ struct EditorView: View {
                         lineHeight: $editorLineHeight,
                         fontSize: $editorFontSize,
                         topInset: $editorTopInset,
+                        cursorPosition: $editorCursorPosition,
                         requestFocus: shouldFocusEditor
                     )
                         .onChange(of: editorContent) { newValue in
                             state.updateContent(tabIndex: state.activeTabIndex, content: newValue)
+                            state.updateCursorPosition(tabIndex: state.activeTabIndex, position: editorCursorPosition)
                             refreshMatchCount()
+                        }
+                        .onChange(of: editorCursorPosition) { newPosition in
+                            state.updateCursorPosition(tabIndex: state.activeTabIndex, position: newPosition)
                         }
                         .onAppear {
                             loadActiveTabContent()
@@ -128,6 +134,7 @@ struct EditorView: View {
     private func loadActiveTabContent() {
         if let tab = state.getActiveTab() {
             editorContent = tab.content
+            editorCursorPosition = tab.cursorPosition
             refreshMatchCount()
             statusMessage = ""
         }
