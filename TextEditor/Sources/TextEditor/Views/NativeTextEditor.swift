@@ -9,6 +9,8 @@ struct NativeTextEditor: NSViewRepresentable {
     @Binding var fontSize: CGFloat
     @Binding var topInset: CGFloat
     @Binding var cursorPosition: Int
+    var findText: String = ""
+    var caseSensitive: Bool = false
     var requestFocus: Bool = false
 
     func makeCoordinator() -> Coordinator {
@@ -72,10 +74,36 @@ struct NativeTextEditor: NSViewRepresentable {
             textView.scrollRangeToVisible(updatedSelection)
         }
 
+        applyHighlights(to: textView)
+
         if requestFocus && textView.window?.firstResponder !== textView {
             DispatchQueue.main.async {
                 textView.window?.makeFirstResponder(textView)
             }
+        }
+    }
+
+    private func applyHighlights(to textView: NSTextView) {
+        guard let layoutManager = textView.layoutManager else { return }
+        let fullRange = NSRange(location: 0, length: (textView.string as NSString).length)
+        layoutManager.removeTemporaryAttribute(.backgroundColor, forCharacterRange: fullRange)
+
+        guard !findText.isEmpty else { return }
+
+        let options: String.CompareOptions = caseSensitive ? [] : [.caseInsensitive]
+        let nsString = textView.string as NSString
+        var searchRange = NSRange(location: 0, length: nsString.length)
+
+        while searchRange.length > 0 {
+            let matchRange = nsString.range(of: findText, options: options, range: searchRange)
+            guard matchRange.location != NSNotFound else { break }
+            layoutManager.addTemporaryAttribute(
+                .backgroundColor,
+                value: NSColor.systemBlue.withAlphaComponent(0.6),
+                forCharacterRange: matchRange
+            )
+            let nextLocation = matchRange.location + matchRange.length
+            searchRange = NSRange(location: nextLocation, length: nsString.length - nextLocation)
         }
     }
 

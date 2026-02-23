@@ -7,11 +7,12 @@ struct EditorView: View {
     @State private var editorLineStartOffsets: [CGFloat] = [6]
     @State private var findText: String = ""
     @State private var replaceText: String = ""
-    @State private var caseSensitive: Bool = true
+    @State private var caseSensitive: Bool = false
     @State private var matchCount: Int = 0
     @State private var statusMessage: String = ""
     @State private var shouldFocusEditor: Bool = false
     @State private var showFindReplaceBar: Bool = false
+    @State private var showReplace: Bool = false
     @State private var keyMonitor: Any?
     @State private var editorScrollOffset: CGFloat = 0
     @State private var editorLineHeight: CGFloat = 0
@@ -27,6 +28,7 @@ struct EditorView: View {
                         findText: $findText,
                         replaceText: $replaceText,
                         caseSensitive: $caseSensitive,
+                        showReplace: $showReplace,
                         matchCount: matchCount,
                         statusMessage: statusMessage,
                         onReplaceNext: replaceNext,
@@ -53,6 +55,8 @@ struct EditorView: View {
                         fontSize: $editorFontSize,
                         topInset: $editorTopInset,
                         cursorPosition: $editorCursorPosition,
+                        findText: showFindReplaceBar ? findText : "",
+                        caseSensitive: caseSensitive,
                         requestFocus: shouldFocusEditor
                     )
                         .onChange(of: editorContent) { newValue in
@@ -105,8 +109,20 @@ struct EditorView: View {
         guard keyMonitor == nil else { return }
         keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
             let modifiers = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
-            if modifiers == .command, event.charactersIgnoringModifiers?.lowercased() == "f" {
+            let key = event.charactersIgnoringModifiers?.lowercased()
+
+            if modifiers == [.command, .option], key == "f" {
                 showFindReplaceBar = true
+                showReplace = true
+                shouldFocusEditor = false
+                refreshMatchCount()
+                return nil
+            }
+
+            if modifiers == .command, key == "f" {
+                showFindReplaceBar = true
+                showReplace = false
+                shouldFocusEditor = false
                 refreshMatchCount()
                 return nil
             }
@@ -128,6 +144,7 @@ struct EditorView: View {
 
     private func closeFindReplaceBar() {
         showFindReplaceBar = false
+        showReplace = false
         focusEditor()
     }
 
