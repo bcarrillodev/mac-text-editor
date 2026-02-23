@@ -145,9 +145,60 @@ struct NativeTextEditor: NSViewRepresentable {
             textView.scrollRangeToVisible(textView.selectedRange())
         }
 
+        func textView(_ textView: NSTextView, shouldChangeTextIn affectedCharRange: NSRange, replacementString: String?) -> Bool {
+            guard replacementString == "\n" else { return true }
+
+            let currentText = textView.string as NSString
+            let cursorLocation = textView.selectedRange().location
+            let textLength = currentText.length
+            let lineStarts = Self.logicalLineStartIndices(in: currentText)
+            let lastLineStart = lineStarts.last ?? 0
+
+            var currentLineStart = 0
+            var currentLineEnd = 0
+            var currentLineContentsEnd = 0
+            currentText.getLineStart(
+                &currentLineStart,
+                end: &currentLineEnd,
+                contentsEnd: &currentLineContentsEnd,
+                for: NSRange(location: min(cursorLocation, max(0, textLength)), length: 0)
+            )
+
+            if currentLineStart >= lastLineStart {
+                return true
+            }
+
+            let currentColumn = max(0, cursorLocation - currentLineStart)
+
+            var nextLineStart = 0
+            var nextLineEnd = 0
+            var nextLineContentsEnd = 0
+            currentText.getLineStart(
+                &nextLineStart,
+                end: &nextLineEnd,
+                contentsEnd: &nextLineContentsEnd,
+                for: NSRange(location: currentLineEnd, length: 0)
+            )
+
+            let nextLineLength = max(0, nextLineContentsEnd - nextLineStart)
+            let targetLocation = nextLineStart + min(currentColumn, nextLineLength)
+            let newSelection = NSRange(location: targetLocation, length: 0)
+            textView.setSelectedRange(newSelection)
+            textView.scrollRangeToVisible(newSelection)
+
+            DispatchQueue.main.async {
+                self.cursorPosition = targetLocation
+            }
+
+            return false
+        }
+
         func textViewDidChangeSelection(_ notification: Notification) {
             guard let textView else { return }
-            cursorPosition = textView.selectedRange().location
+            let location = textView.selectedRange().location
+            DispatchQueue.main.async {
+                self.cursorPosition = location
+            }
         }
 
         func bindScrollObservation(to scrollView: NSScrollView) {
