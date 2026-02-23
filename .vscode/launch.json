@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:mac-text-editor}/TextEditor",
+            "name": "Debug TextEditor (TextEditor)",
+            "target": "TextEditor",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug TextEditor (TextEditor)"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:mac-text-editor}/TextEditor",
+            "name": "Release TextEditor (TextEditor)",
+            "target": "TextEditor",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release TextEditor (TextEditor)"
+        }
+    ]
+}

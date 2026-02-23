@@ -126,7 +126,9 @@ struct NativeTextEditor: NSViewRepresentable {
             observedScrollView = scrollView
             scrollView.contentView.postsBoundsChangedNotifications = true
             lastObservedContentWidth = scrollView.contentView.bounds.width
-            scrollOffset = scrollView.contentView.bounds.origin.y
+            DispatchQueue.main.async {
+                self.scrollOffset = scrollView.contentView.bounds.origin.y
+            }
             NotificationCenter.default.addObserver(
                 self,
                 selector: #selector(handleClipViewBoundsChange(_:)),
@@ -138,10 +140,16 @@ struct NativeTextEditor: NSViewRepresentable {
         func updateMetrics(from textView: NSTextView) {
             guard let layoutManager = textView.layoutManager else { return }
             let font = textView.font ?? .monospacedSystemFont(ofSize: NSFont.systemFontSize, weight: .regular)
-            lineHeight = layoutManager.defaultLineHeight(for: font)
-            fontSize = font.pointSize
-            topInset = textView.textContainerInset.height
-            updateLineStartOffsets(from: textView)
+            let newLineHeight = layoutManager.defaultLineHeight(for: font)
+            let newFontSize = font.pointSize
+            let newTopInset = textView.textContainerInset.height
+
+            DispatchQueue.main.async {
+                self.lineHeight = newLineHeight
+                self.fontSize = newFontSize
+                self.topInset = newTopInset
+                self.updateLineStartOffsets(from: textView)
+            }
         }
 
         private func updateLineStartOffsets(from textView: NSTextView) {

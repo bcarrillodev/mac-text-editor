@@ -39,7 +39,8 @@ struct EditorView: View {
                         lineStartOffsets: editorLineStartOffsets,
                         scrollOffset: editorScrollOffset,
                         lineHeight: editorLineHeight,
-                        fontSize: editorFontSize
+                        fontSize: editorFontSize,
+                        topInset: editorTopInset
                     )
                     .frame(width: 50)
 

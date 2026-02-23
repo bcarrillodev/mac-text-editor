@@ -6,6 +6,7 @@ struct LineNumberView: NSViewRepresentable {
     let scrollOffset: CGFloat
     let lineHeight: CGFloat
     let fontSize: CGFloat
+    let topInset: CGFloat
 
     func makeNSView(context: Context) -> LineNumberGutterNSView {
         let view = LineNumberGutterNSView()
@@ -13,6 +14,7 @@ struct LineNumberView: NSViewRepresentable {
         view.scrollOffset = scrollOffset
         view.lineHeight = lineHeight
         view.fontSize = fontSize
+        view.topInset = topInset
         return view
     }
 
@@ -21,6 +23,7 @@ struct LineNumberView: NSViewRepresentable {
         nsView.scrollOffset = scrollOffset
         nsView.lineHeight = lineHeight
         nsView.fontSize = fontSize
+        nsView.topInset = topInset
         nsView.needsDisplay = true
     }
 }
@@ -30,6 +33,7 @@ final class LineNumberGutterNSView: NSView {
     var scrollOffset: CGFloat = 0
     var lineHeight: CGFloat = 0
     var fontSize: CGFloat = NSFont.systemFontSize
+    var topInset: CGFloat = 6
 
     override var isFlipped: Bool { true }
 
@@ -38,7 +42,6 @@ final class LineNumberGutterNSView: NSView {
         bounds.fill()
 
         let effectiveLineHeight = max(1, lineHeight)
-        let verticalTextInset: CGFloat = 15
         let effectiveFont = NSFont.monospacedSystemFont(ofSize: max(1, fontSize), weight: .regular)
         let visibleOffset = max(0, scrollOffset)
         let offsets = lineStartOffsets.isEmpty ? [0] : lineStartOffsets
@@ -67,7 +70,8 @@ final class LineNumberGutterNSView: NSView {
                 break
             }
 
-            let y = lineOffset - visibleOffset + verticalTextInset
+            let baselineOffset: CGFloat = -6
+            let y = lineOffset - visibleOffset + topInset + baselineOffset
             let rect = NSRect(x: 0, y: y, width: bounds.width - 8, height: effectiveLineHeight)
             NSString(string: "\(lineIndex + 1)").draw(in: rect, withAttributes: attributes)
         }

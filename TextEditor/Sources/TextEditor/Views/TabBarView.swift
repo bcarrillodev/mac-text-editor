@@ -79,7 +79,7 @@ struct TabBarView: View {
                 .padding(.trailing, 10)
             }
         }
-        .frame(height: 24)
+        .frame(height: 33)
         .background(Color(NSColor.controlBackgroundColor))
         .border(Color.gray.opacity(0.3), width: 1)
     }
@@ -161,8 +161,8 @@ struct TabItem: View {
             .padding(.leading, 4)
         }
         .padding(.horizontal, 8)
-        .padding(.vertical, 6)
-        .background(isActive ? Color.white : Color(NSColor.controlBackgroundColor))
+        .padding(.vertical, 10)
+        .background(isActive ? Color(NSColor.windowBackgroundColor) : Color(NSColor.controlBackgroundColor))
         .border(Color.gray.opacity(0.3), width: 1)
         .onTapGesture(perform: onSelect)
     }
