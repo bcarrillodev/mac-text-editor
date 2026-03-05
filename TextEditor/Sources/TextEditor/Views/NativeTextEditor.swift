@@ -2,6 +2,13 @@ import SwiftUI
 import AppKit
 
 struct NativeTextEditor: NSViewRepresentable {
+    private static let editorTextColor = NSColor(
+        red: 244.0 / 255.0,
+        green: 239.0 / 255.0,
+        blue: 230.0 / 255.0,
+        alpha: 1.0
+    )
+
     @Binding var text: String
     @Binding var lineStartOffsets: [CGFloat]
     @Binding var scrollOffset: CGFloat
@@ -37,10 +44,16 @@ struct NativeTextEditor: NSViewRepresentable {
         textView.importsGraphics = false
         textView.usesFindBar = true
         textView.font = .monospacedSystemFont(ofSize: NSFont.systemFontSize, weight: .regular)
+        textView.textColor = Self.editorTextColor
         if let editorFont = textView.font {
             textView.typingAttributes[.font] = editorFont
+            textView.typingAttributes[.foregroundColor] = Self.editorTextColor
         }
         textView.backgroundColor = .textBackgroundColor
+        textView.insertionPointColor = NSColor(red: 0.608, green: 0.525, blue: 0.353, alpha: 1.0) // #9B865A
+        textView.selectedTextAttributes = [
+            .backgroundColor: NSColor(red: 0.608, green: 0.525, blue: 0.353, alpha: 1.0)
+        ]
         textView.delegate = context.coordinator
         textView.string = text
         textView.textContainerInset = NSSize(width: 4, height: 6)
@@ -64,8 +77,10 @@ struct NativeTextEditor: NSViewRepresentable {
 
         if textView.string != text {
             textView.string = text
+            textView.textColor = Self.editorTextColor
             if let editorFont = textView.font {
                 textView.typingAttributes[.font] = editorFont
+                textView.typingAttributes[.foregroundColor] = Self.editorTextColor
             }
             let maxLocation = (text as NSString).length
             let clampedLocation = min(cursorPosition, maxLocation)
@@ -99,7 +114,7 @@ struct NativeTextEditor: NSViewRepresentable {
             guard matchRange.location != NSNotFound else { break }
             layoutManager.addTemporaryAttribute(
                 .backgroundColor,
-                value: NSColor.systemBlue.withAlphaComponent(0.6),
+                value: NSColor(red: 0.608, green: 0.525, blue: 0.353, alpha: 1.0).withAlphaComponent(0.6),
                 forCharacterRange: matchRange
             )
             let nextLocation = matchRange.location + matchRange.length

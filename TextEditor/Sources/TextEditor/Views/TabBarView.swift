@@ -148,7 +148,7 @@ struct TabItem: View {
             
             if tab.isModified {
                 Circle()
-                    .fill(Color.orange)
+                    .fill(Color(red: 0.608, green: 0.525, blue: 0.353))
                     .frame(width: 6, height: 6)
             }
             

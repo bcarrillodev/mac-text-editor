@@ -6,6 +6,11 @@ struct ContentView: View {
     private let logger = Logger(subsystem: "mac-text-editor", category: "ContentView")
     @StateObject private var state = EditorState()
     @StateObject private var autoSaveService = AutoSaveService()
+    private let promptService: SavePrompting
+
+    init(promptService: SavePrompting = SavePromptService()) {
+        self.promptService = promptService
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -20,19 +25,27 @@ struct ContentView: View {
 
             EditorView(state: state)
         }
+        .background(
+            WindowCloseInterceptor(onShouldClose: confirmWindowClose)
+        )
         .frame(minWidth: 600, minHeight: 400)
         .onAppear {
+            AppDelegate.shared?.shouldTerminateHandler = confirmApplicationTermination
             loadSession()
             startAutoSave()
             activateAppWindow()
         }
         .onDisappear {
+            if AppDelegate.shared?.shouldTerminateHandler != nil {
+                AppDelegate.shared?.shouldTerminateHandler = nil
+            }
             saveSession()
             autoSaveService.stopAutoSave()
         }
     }
 
     private func closeTab(_ index: Int) {
+        guard makePromptController().confirmCloseTab(in: state, at: index) else { return }
         state.closeTab(at: index)
     }
 
@@ -61,27 +74,27 @@ struct ContentView: View {
 
     private func saveActiveTab() {
         guard state.activeTabIndex >= 0 && state.activeTabIndex < state.openTabs.count else { return }
-        saveTab(at: state.activeTabIndex, allowSaveAsForUntitled: true)
+        _ = saveTab(at: state.activeTabIndex, allowSaveAsForUntitled: true)
         saveSession()
     }
 
     private func saveModifiedTabsForAutoSave() {
         for index in state.openTabs.indices {
             guard state.openTabs[index].isModified else { continue }
-            saveTab(at: index, allowSaveAsForUntitled: false)
+            _ = saveTab(at: index, allowSaveAsForUntitled: false)
         }
         saveSession()
     }
 
-    private func saveTab(at index: Int, allowSaveAsForUntitled: Bool) {
-        guard index >= 0 && index < state.openTabs.count else { return }
+    private func saveTab(at index: Int, allowSaveAsForUntitled: Bool) -> Bool {
+        guard index >= 0 && index < state.openTabs.count else { return false }
 
         let tab = state.openTabs[index]
         var pathToSave = tab.filePath
 
         if tab.filePath == EditorState.untitledPath {
             guard allowSaveAsForUntitled, let selectedPath = promptSavePath(defaultName: tab.fileName) else {
-                return
+                return false
             }
             state.updateTabPath(at: index, newPath: selectedPath)
             pathToSave = selectedPath
@@ -90,9 +103,10 @@ struct ContentView: View {
         do {
             try FileService.shared.writeFile(path: pathToSave, content: state.openTabs[index].content)
             state.markTabSaved(at: index)
+            return true
         } catch {
             logger.error("Failed to save tab at path \(pathToSave, privacy: .public): \(error.localizedDescription, privacy: .public)")
-            return
+            return false
         }
     }
 
@@ -137,5 +151,45 @@ struct ContentView: View {
             NSApp.activate(ignoringOtherApps: true)
             NSApp.windows.first { $0.canBecomeKey }?.makeKeyAndOrderFront(nil)
         }
+    }
+
+    private func makePromptController() -> EditedFilePromptController {
+        EditedFilePromptController(
+            promptService: promptService,
+            saveDocument: { index in
+                self.saveTab(at: index, allowSaveAsForUntitled: true)
+            },
+            discardDocument: discardChangesForSessionPersistence
+        )
+    }
+
+    private func discardChangesForSessionPersistence(at index: Int) {
+        guard index >= 0 && index < state.openTabs.count else { return }
+
+        let tab = state.openTabs[index]
+        if tab.filePath == EditorState.untitledPath {
+            state.closeTab(at: index)
+            return
+        }
+
+        do {
+            let currentCursor = state.openTabs[index].cursorPosition
+            let persistedContent = try FileService.shared.readFile(path: tab.filePath)
+            state.restoreContent(tabIndex: index, content: persistedContent)
+            state.updateCursorPosition(
+                tabIndex: index,
+                position: min(currentCursor, (persistedContent as NSString).length)
+            )
+        } catch {
+            logger.error("Failed to discard changes for path \(tab.filePath, privacy: .public): \(error.localizedDescription, privacy: .public)")
+        }
+    }
+
+    private func confirmWindowClose() -> Bool {
+        makePromptController().confirmCloseAll(in: state)
+    }
+
+    private func confirmApplicationTermination() -> NSApplication.TerminateReply {
+        confirmWindowClose() ? .terminateNow : .terminateCancel
     }
 }

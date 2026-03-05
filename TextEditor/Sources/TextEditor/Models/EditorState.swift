@@ -129,6 +129,14 @@ class EditorState: ObservableObject {
         openTabs[tabIndex].cursorPosition = position
     }
 
+    func restoreContent(tabIndex: Int, content: String) {
+        guard isValidTabIndex(tabIndex) else { return }
+        openTabs[tabIndex].content = content
+        openTabs[tabIndex].isModified = false
+        openTabs[tabIndex].cursorPosition = min(openTabs[tabIndex].cursorPosition, (content as NSString).length)
+        unsavedChanges.removeValue(forKey: openTabs[tabIndex].filePath)
+    }
+
     private func isValidTabIndex(_ index: Int) -> Bool {
         index >= 0 && index < openTabs.count
     }
