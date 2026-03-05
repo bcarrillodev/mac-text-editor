@@ -10,6 +10,7 @@ struct TabBarView: View {
     var onSave: () -> Void
     private let addButtonWidth: CGFloat = 34
     private let overflowButtonWidth: CGFloat = 36
+    private let emptyStateSpacingWidth = TabBarViewLayout.estimatedWidth(forFileName: "Untitled")
     
     var body: some View {
         GeometryReader { geometry in
@@ -59,6 +60,11 @@ struct TabBarView: View {
                 .frame(width: addButtonWidth)
                 .help("New Tab")
 
+                if state.openTabs.isEmpty {
+                    Color.clear
+                        .frame(width: emptyStateSpacingWidth)
+                }
+
                 Spacer(minLength: 0)
 
                 HStack(spacing: 6) {
@@ -80,6 +86,7 @@ struct TabBarView: View {
             }
         }
         .frame(height: 33)
+        .clipped()
         .background(Color(NSColor.controlBackgroundColor))
         .border(Color.gray.opacity(0.3), width: 1)
     }
@@ -114,11 +121,15 @@ struct TabBarViewLayout {
     }
 
     static func estimatedWidth(for tab: FileDocument) -> CGFloat {
+        estimatedWidth(forFileName: tab.fileName, isModified: tab.isModified)
+    }
+
+    static func estimatedWidth(forFileName fileName: String, isModified: Bool = false) -> CGFloat {
         let font = NSFont.monospacedSystemFont(ofSize: NSFont.systemFontSize(for: .small), weight: .regular)
-        let textWidth = (tab.fileName as NSString).size(withAttributes: [.font: font]).width
-        let modifiedDotWidth: CGFloat = tab.isModified ? 12 : 0
+        let textWidth = (fileName as NSString).size(withAttributes: [.font: font]).width
+        let modifiedDotWidth: CGFloat = isModified ? 12 : 0
         let closeButtonWidth: CGFloat = 14
-        let spacingWidth: CGFloat = tab.isModified ? 16 : 10
+        let spacingWidth: CGFloat = isModified ? 16 : 10
         let horizontalPadding: CGFloat = 16
         return textWidth + modifiedDotWidth + closeButtonWidth + spacingWidth + horizontalPadding
     }
@@ -140,6 +151,11 @@ struct TabItem: View {
     let isActive: Bool
     var onSelect: () -> Void
     var onClose: () -> Void
+
+    private static let inactiveBackground = Color(NSColor.controlBackgroundColor)
+    private static let activeBackground = Color(
+        NSColor.controlBackgroundColor.blended(withFraction: 0.08, of: .white) ?? NSColor.controlBackgroundColor
+    )
     
     var body: some View {
         HStack(spacing: 6) {
@@ -162,7 +178,7 @@ struct TabItem: View {
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 10)
-        .background(isActive ? Color(NSColor.windowBackgroundColor) : Color(NSColor.controlBackgroundColor))
+        .background(isActive ? Self.activeBackground : Self.inactiveBackground)
         .border(Color.gray.opacity(0.3), width: 1)
         .onTapGesture(perform: onSelect)
     }

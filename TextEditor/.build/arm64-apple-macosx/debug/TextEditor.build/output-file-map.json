@@ -6,96 +6,119 @@
     "dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/EditorState.d",
     "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/EditorState.swift.o",
     "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/EditorState~partial.swiftmodule",
-    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/EditorState.swiftdeps"
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/EditorState.swiftdeps",
+    "diagnostics": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/EditorState.dia"
   },
   "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Models/FileDocument.swift": {
     "dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/FileDocument.d",
     "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/FileDocument.swift.o",
     "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/FileDocument~partial.swiftmodule",
-    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/FileDocument.swiftdeps"
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/FileDocument.swiftdeps",
+    "diagnostics": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/FileDocument.dia"
   },
   "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Services/AutoSaveService.swift": {
     "dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/AutoSaveService.d",
     "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/AutoSaveService.swift.o",
     "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/AutoSaveService~partial.swiftmodule",
-    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/AutoSaveService.swiftdeps"
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/AutoSaveService.swiftdeps",
+    "diagnostics": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/AutoSaveService.dia"
   },
   "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Services/EditedFilePromptController.swift": {
     "dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/EditedFilePromptController.d",
     "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/EditedFilePromptController.swift.o",
     "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/EditedFilePromptController~partial.swiftmodule",
-    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/EditedFilePromptController.swiftdeps"
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/EditedFilePromptController.swiftdeps",
+    "diagnostics": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/EditedFilePromptController.dia"
   },
   "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Services/FileService.swift": {
     "dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/FileService.d",
     "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/FileService.swift.o",
     "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/FileService~partial.swiftmodule",
-    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/FileService.swiftdeps"
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/FileService.swiftdeps",
+    "diagnostics": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/FileService.dia"
   },
   "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Services/SavePromptService.swift": {
     "dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/SavePromptService.d",
     "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/SavePromptService.swift.o",
     "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/SavePromptService~partial.swiftmodule",
-    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/SavePromptService.swiftdeps"
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/SavePromptService.swiftdeps",
+    "diagnostics": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/SavePromptService.dia"
   },
   "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Services/SessionPersistenceService.swift": {
     "dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/SessionPersistenceService.d",
     "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/SessionPersistenceService.swift.o",
     "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/SessionPersistenceService~partial.swiftmodule",
-    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/SessionPersistenceService.swiftdeps"
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/SessionPersistenceService.swiftdeps",
+    "diagnostics": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/SessionPersistenceService.dia"
   },
   "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/TextEditorApp.swift": {
     "dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/TextEditorApp.d",
     "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/TextEditorApp.swift.o",
     "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/TextEditorApp~partial.swiftmodule",
-    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/TextEditorApp.swiftdeps"
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/TextEditorApp.swiftdeps",
+    "diagnostics": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/TextEditorApp.dia"
   },
   "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/ContentView.swift": {
     "dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/ContentView.d",
     "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/ContentView.swift.o",
     "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/ContentView~partial.swiftmodule",
-    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/ContentView.swiftdeps"
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/ContentView.swiftdeps",
+    "diagnostics": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/ContentView.dia"
   },
   "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/EditorView.swift": {
     "dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/EditorView.d",
     "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/EditorView.swift.o",
     "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/EditorView~partial.swiftmodule",
-    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/EditorView.swiftdeps"
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/EditorView.swiftdeps",
+    "diagnostics": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/EditorView.dia"
   },
   "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/FindReplaceBar.swift": {
     "dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/FindReplaceBar.d",
     "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/FindReplaceBar.swift.o",
     "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/FindReplaceBar~partial.swiftmodule",
-    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/FindReplaceBar.swiftdeps"
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/FindReplaceBar.swiftdeps",
+    "diagnostics": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/FindReplaceBar.dia"
+  },
+  "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/GlowlessTextView.swift": {
+    "dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/GlowlessTextView.d",
+    "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/GlowlessTextView.swift.o",
+    "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/GlowlessTextView~partial.swiftmodule",
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/GlowlessTextView.swiftdeps",
+    "diagnostics": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/GlowlessTextView.dia"
   },
   "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/LineNumberView.swift": {
     "dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/LineNumberView.d",
     "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/LineNumberView.swift.o",
     "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/LineNumberView~partial.swiftmodule",
-    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/LineNumberView.swiftdeps"
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/LineNumberView.swiftdeps",
+    "diagnostics": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/LineNumberView.dia"
   },
   "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/NativeTextEditor.swift": {
     "dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/NativeTextEditor.d",
     "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/NativeTextEditor.swift.o",
     "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/NativeTextEditor~partial.swiftmodule",
-    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/NativeTextEditor.swiftdeps"
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/NativeTextEditor.swiftdeps",
+    "diagnostics": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/NativeTextEditor.dia"
   },
   "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/TabBarView.swift": {
     "dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/TabBarView.d",
     "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/TabBarView.swift.o",
     "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/TabBarView~partial.swiftmodule",
-    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/TabBarView.swiftdeps"
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/TabBarView.swiftdeps",
+    "diagnostics": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/TabBarView.dia"
   },
   "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/WindowCloseInterceptor.swift": {
     "dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/WindowCloseInterceptor.d",
     "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/WindowCloseInterceptor.swift.o",
     "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/WindowCloseInterceptor~partial.swiftmodule",
-    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/WindowCloseInterceptor.swiftdeps"
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/WindowCloseInterceptor.swiftdeps",
+    "diagnostics": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/WindowCloseInterceptor.dia"
   },
   "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/DerivedSources/resource_bundle_accessor.swift": {
     "dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/resource_bundle_accessor.d",
     "object": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/resource_bundle_accessor.swift.o",
     "swiftmodule": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/resource_bundle_accessor~partial.swiftmodule",
-    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/resource_bundle_accessor.swiftdeps"
+    "swift-dependencies": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/resource_bundle_accessor.swiftdeps",
+    "diagnostics": "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/resource_bundle_accessor.dia"
   }
 }

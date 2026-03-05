@@ -3,5 +3,6 @@
 /Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/EditorStateTests.swift
 /Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/EditorWorkflowTests.swift
 /Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/FileServiceTests.swift
+/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/NativeTextEditorBackspaceTests.swift
 /Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/SessionPersistenceTests.swift
 /Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/TabBarViewLayoutTests.swift

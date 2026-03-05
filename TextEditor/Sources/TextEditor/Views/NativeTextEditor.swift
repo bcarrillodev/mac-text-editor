@@ -33,10 +33,28 @@ struct NativeTextEditor: NSViewRepresentable {
     }
 
     func makeNSView(context: Context) -> NSScrollView {
-        let scrollView = NSTextView.scrollableTextView()
-        guard let textView = scrollView.documentView as? NSTextView else {
-            return scrollView
-        }
+        let scrollView = NSScrollView()
+        scrollView.hasVerticalScroller = true
+        scrollView.hasHorizontalScroller = true
+        scrollView.autohidesScrollers = true
+        scrollView.borderType = .noBorder
+
+        let textStorage = NSTextStorage()
+        let layoutManager = NSLayoutManager()
+        textStorage.addLayoutManager(layoutManager)
+        let textContainer = NSTextContainer(containerSize: NSSize(width: 0, height: CGFloat.greatestFiniteMagnitude))
+        textContainer.widthTracksTextView = true
+        layoutManager.addTextContainer(textContainer)
+
+        let textView = GlowlessTextView(frame: .zero, textContainer: textContainer)
+        textView.minSize = NSSize(width: 0, height: 0)
+        textView.maxSize = NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
+        textView.isVerticallyResizable = true
+        textView.isHorizontallyResizable = false
+        textView.autoresizingMask = [.width]
+
+        scrollView.documentView = textView
+        scrollView.contentView.postsBoundsChangedNotifications = true
 
         textView.isEditable = true
         textView.isSelectable = true
@@ -50,9 +68,11 @@ struct NativeTextEditor: NSViewRepresentable {
             textView.typingAttributes[.foregroundColor] = Self.editorTextColor
         }
         textView.backgroundColor = .textBackgroundColor
+        textView.focusRingType = .none
         textView.insertionPointColor = NSColor(red: 0.608, green: 0.525, blue: 0.353, alpha: 1.0) // #9B865A
         textView.selectedTextAttributes = [
-            .backgroundColor: NSColor(red: 0.608, green: 0.525, blue: 0.353, alpha: 1.0)
+            .backgroundColor: NSColor(red: 0.608, green: 0.525, blue: 0.353, alpha: 1.0),
+            .foregroundColor: Self.editorTextColor
         ]
         textView.delegate = context.coordinator
         textView.string = text
@@ -85,11 +105,43 @@ struct NativeTextEditor: NSViewRepresentable {
             let maxLocation = (text as NSString).length
             let clampedLocation = min(cursorPosition, maxLocation)
             let updatedSelection = NSRange(location: clampedLocation, length: 0)
-            textView.setSelectedRange(updatedSelection)
-            textView.scrollRangeToVisible(updatedSelection)
+            DispatchQueue.main.async {
+                self.applyHighlights(to: textView)
+                // If selection is at end-of-document, force layout/redraw to clear any stale caret
+                let isAtEnd = updatedSelection.location == (textView.string as NSString).length
+                if isAtEnd {
+                    if let container = textView.textContainer {
+                        textView.layoutManager?.ensureLayout(for: container)
+                    }
+                    textView.layoutSubtreeIfNeeded()
+                    textView.setNeedsDisplay(textView.visibleRect)
+                }
+                let restoreSelection: () -> Void = {
+                    let currentSelection = textView.selectedRange()
+                    if currentSelection.location != updatedSelection.location || currentSelection.length != updatedSelection.length {
+                        textView.setSelectedRange(updatedSelection)
+                        textView.scrollRangeToVisible(updatedSelection)
+                        // Invalidate caret rect to avoid any blink artifacts
+                        if let lm = textView.layoutManager {
+                            let loc = min(textView.selectedRange().location, (textView.string as NSString).length)
+                            let glyphIndex = lm.glyphIndexForCharacter(at: loc)
+                            let lineRect = lm.lineFragmentRect(forGlyphAt: glyphIndex, effectiveRange: nil)
+                            let rectInView = lineRect.offsetBy(dx: textView.textContainerOrigin.x, dy: textView.textContainerOrigin.y)
+                            textView.setNeedsDisplay(rectInView.insetBy(dx: -2, dy: -2))
+                        }
+                    }
+                }
+                if isAtEnd {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.025) {
+                        restoreSelection()
+                    }
+                } else {
+                    restoreSelection()
+                }
+            }
+        } else {
+            applyHighlights(to: textView)
         }
-
-        applyHighlights(to: textView)
 
         if requestFocus && textView.window?.firstResponder !== textView {
             DispatchQueue.main.async {
@@ -157,55 +209,104 @@ struct NativeTextEditor: NSViewRepresentable {
             text = textView.string
             cursorPosition = textView.selectedRange().location
             updateLineStartOffsets(from: textView)
-            textView.scrollRangeToVisible(textView.selectedRange())
         }
 
         func textView(_ textView: NSTextView, shouldChangeTextIn affectedCharRange: NSRange, replacementString: String?) -> Bool {
-            guard replacementString == "\n" else { return true }
-
             let currentText = textView.string as NSString
-            let cursorLocation = textView.selectedRange().location
+            let selectionRange = textView.selectedRange()
+
+            if Self.shouldPreventBackspaceLineMerge(
+                in: currentText,
+                selectionRange: selectionRange,
+                affectedCharRange: affectedCharRange,
+                replacementString: replacementString
+            ) {
+                if let targetLocation = Self.backspaceNavigationTarget(
+                    in: currentText,
+                    cursorLocation: selectionRange.location
+                ) {
+                    let oldSelection = selectionRange
+                    let newSelection = NSRange(location: targetLocation, length: 0)
+
+                    if oldSelection != newSelection {
+                        self.invalidateInsertionPoint(at: oldSelection.location, in: textView)
+                        textView.setSelectedRange(newSelection)
+                        textView.scrollRangeToVisible(newSelection)
+                        self.invalidateInsertionPoint(at: newSelection.location, in: textView)
+                    }
+
+                    DispatchQueue.main.async {
+                        self.cursorPosition = targetLocation
+                    }
+                }
+                return false
+            }
+
+            return true
+        }
+
+        static func shouldPreventBackspaceLineMerge(
+            in currentText: NSString,
+            selectionRange: NSRange,
+            affectedCharRange: NSRange,
+            replacementString: String?
+        ) -> Bool {
+            guard selectionRange.length == 0 else { return false }
+            guard replacementString == "" else { return false }
+            guard affectedCharRange.length == 1 else { return false }
+
             let textLength = currentText.length
-            let lineStarts = Self.logicalLineStartIndices(in: currentText)
-            let lastLineStart = lineStarts.last ?? 0
+            guard textLength > 0 else { return false }
+            guard affectedCharRange.location >= 0, affectedCharRange.location < textLength else { return false }
+            guard currentText.character(at: affectedCharRange.location) == 0x0A else { return false } // "\n"
+
+            let cursorLocation = selectionRange.location
+            guard cursorLocation > 0 else { return false }
 
             var currentLineStart = 0
-            var currentLineEnd = 0
-            var currentLineContentsEnd = 0
             currentText.getLineStart(
                 &currentLineStart,
-                end: &currentLineEnd,
-                contentsEnd: &currentLineContentsEnd,
-                for: NSRange(location: min(cursorLocation, max(0, textLength)), length: 0)
+                end: nil,
+                contentsEnd: nil,
+                for: NSRange(location: min(cursorLocation, textLength), length: 0)
             )
 
-            if currentLineStart >= lastLineStart {
-                return true
-            }
+            let lineStarts = logicalLineStartIndices(in: currentText)
+            let lastLineStart = lineStarts.last ?? 0
+            let isAtLineStart = cursorLocation == currentLineStart
+
+            return isAtLineStart && currentLineStart < lastLineStart
+        }
+
+        static func backspaceNavigationTarget(in currentText: NSString, cursorLocation: Int) -> Int? {
+            let textLength = currentText.length
+            guard textLength > 0 else { return nil }
+            guard cursorLocation > 0, cursorLocation <= textLength else { return nil }
+
+            var currentLineStart = 0
+            currentText.getLineStart(
+                &currentLineStart,
+                end: nil,
+                contentsEnd: nil,
+                for: NSRange(location: min(cursorLocation, textLength), length: 0)
+            )
+
+            guard currentLineStart > 0 else { return nil }
 
             let currentColumn = max(0, cursorLocation - currentLineStart)
 
-            var nextLineStart = 0
-            var nextLineEnd = 0
-            var nextLineContentsEnd = 0
+            var previousLineStart = 0
+            var previousLineEnd = 0
+            var previousLineContentsEnd = 0
             currentText.getLineStart(
-                &nextLineStart,
-                end: &nextLineEnd,
-                contentsEnd: &nextLineContentsEnd,
-                for: NSRange(location: currentLineEnd, length: 0)
+                &previousLineStart,
+                end: &previousLineEnd,
+                contentsEnd: &previousLineContentsEnd,
+                for: NSRange(location: currentLineStart - 1, length: 0)
             )
 
-            let nextLineLength = max(0, nextLineContentsEnd - nextLineStart)
-            let targetLocation = nextLineStart + min(currentColumn, nextLineLength)
-            let newSelection = NSRange(location: targetLocation, length: 0)
-            textView.setSelectedRange(newSelection)
-            textView.scrollRangeToVisible(newSelection)
-
-            DispatchQueue.main.async {
-                self.cursorPosition = targetLocation
-            }
-
-            return false
+            let previousLineLength = max(0, previousLineContentsEnd - previousLineStart)
+            return previousLineStart + min(currentColumn, previousLineLength)
         }
 
         func textViewDidChangeSelection(_ notification: Notification) {
@@ -338,6 +439,16 @@ struct NativeTextEditor: NSViewRepresentable {
             }
 
             return false
+        }
+
+        private func invalidateInsertionPoint(at location: Int, in textView: NSTextView) {
+            guard let layoutManager = textView.layoutManager else { return }
+            let stringLength = (textView.string as NSString).length
+            let clamped = max(0, min(location, stringLength))
+            let glyphIndex = layoutManager.glyphIndexForCharacter(at: clamped)
+            let lineRect = layoutManager.lineFragmentRect(forGlyphAt: glyphIndex, effectiveRange: nil)
+            let rectInView = lineRect.offsetBy(dx: textView.textContainerOrigin.x, dy: textView.textContainerOrigin.y)
+            textView.setNeedsDisplay(rectInView.insetBy(dx: -2, dy: -2))
         }
 
         @objc private func handleClipViewBoundsChange(_ notification: Notification) {

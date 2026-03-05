@@ -34,7 +34,7 @@
 
   ],
   "swiftCommands" : {
-    "C.TextEditor-arm64-apple-macosx15.0-debug.module" : {
+    "C.TextEditor-arm64-apple-macosx26.0-debug.module" : {
       "executable" : "/Library/Developer/CommandLineTools/usr/bin/swiftc",
       "fileList" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/sources",
       "importPath" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/Modules",
@@ -85,6 +85,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/GlowlessTextView.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/LineNumberView.swift"
         },
         {
@@ -109,7 +113,7 @@
         },
         {
           "kind" : "virtual",
-          "name" : "<TextEditor-arm64-apple-macosx15.0-debug.module-resources>"
+          "name" : "<TextEditor-arm64-apple-macosx26.0-debug.module-resources>"
         },
         {
           "kind" : "file",
@@ -131,6 +135,7 @@
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/ContentView.swift.o",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/EditorView.swift.o",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/FindReplaceBar.swift.o",
+        "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/GlowlessTextView.swift.o",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/LineNumberView.swift.o",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/NativeTextEditor.swift.o",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/TabBarView.swift.o",
@@ -140,7 +145,9 @@
       "otherArguments" : [
         "-target",
         "arm64-apple-macosx12.0",
+        "-incremental",
         "-enable-batch-mode",
+        "-serialize-diagnostics",
         "-index-store-path",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/index/store",
         "-Onone",
@@ -148,6 +155,7 @@
         "-j10",
         "-DSWIFT_PACKAGE",
         "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_AVAILABLE",
         "-module-cache-path",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/ModuleCache",
         "-parseable-output",
@@ -157,8 +165,12 @@
         "TextEditor_main",
         "-swift-version",
         "5",
-        "-F",
+        "-I",
         "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-L",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-plugin-path",
+        "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
         "-sdk",
         "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
         "-g",
@@ -219,6 +231,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/GlowlessTextView.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/LineNumberView.swift.o"
         },
         {
@@ -255,6 +271,7 @@
         "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/ContentView.swift",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/EditorView.swift",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/FindReplaceBar.swift",
+        "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/GlowlessTextView.swift",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/LineNumberView.swift",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/NativeTextEditor.swift",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/TabBarView.swift",
@@ -264,7 +281,7 @@
       "tempsPath" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build",
       "wholeModuleOptimization" : false
     },
-    "C.TextEditorPackageTests-arm64-apple-macosx15.0-debug.module" : {
+    "C.TextEditorPackageTests-arm64-apple-macosx26.0-debug.module" : {
       "executable" : "/Library/Developer/CommandLineTools/usr/bin/swiftc",
       "fileList" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorPackageTests.build/sources",
       "importPath" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/Modules",
@@ -295,7 +312,9 @@
       "otherArguments" : [
         "-target",
         "arm64-apple-macosx12.0",
+        "-incremental",
         "-enable-batch-mode",
+        "-serialize-diagnostics",
         "-index-store-path",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/index/store",
         "-Onone",
@@ -305,15 +324,20 @@
         "-j10",
         "-DSWIFT_PACKAGE",
         "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
         "-module-cache-path",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/ModuleCache",
         "-parseable-output",
         "-parse-as-library",
         "-emit-objc-header",
         "-emit-objc-header-path",
-        "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorPackageTests.build/TextEditorPackageTests-Swift.h",
-        "-F",
+        "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorPackageTests.build/include/TextEditorPackageTests-Swift.h",
+        "-I",
         "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-L",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-plugin-path",
+        "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
         "-sdk",
         "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
         "-g",
@@ -344,7 +368,7 @@
       "tempsPath" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorPackageTests.build",
       "wholeModuleOptimization" : false
     },
-    "C.TextEditorTests-arm64-apple-macosx15.0-debug.module" : {
+    "C.TextEditorTests-arm64-apple-macosx26.0-debug.module" : {
       "executable" : "/Library/Developer/CommandLineTools/usr/bin/swiftc",
       "fileList" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/sources",
       "importPath" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/Modules",
@@ -368,6 +392,10 @@
         {
           "kind" : "file",
           "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/FileServiceTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/NativeTextEditorBackspaceTests.swift"
         },
         {
           "kind" : "file",
@@ -399,13 +427,16 @@
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/EditorStateTests.swift.o",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/EditorWorkflowTests.swift.o",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/FileServiceTests.swift.o",
+        "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/NativeTextEditorBackspaceTests.swift.o",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/SessionPersistenceTests.swift.o",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/TabBarViewLayoutTests.swift.o"
       ],
       "otherArguments" : [
         "-target",
         "arm64-apple-macosx12.0",
+        "-incremental",
         "-enable-batch-mode",
+        "-serialize-diagnostics",
         "-index-store-path",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/index/store",
         "-Onone",
@@ -415,14 +446,19 @@
         "-j10",
         "-DSWIFT_PACKAGE",
         "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
         "-module-cache-path",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/ModuleCache",
         "-parseable-output",
         "-parse-as-library",
         "-swift-version",
         "5",
-        "-F",
+        "-I",
         "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-L",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-plugin-path",
+        "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
         "-sdk",
         "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
         "-g",
@@ -459,6 +495,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/NativeTextEditorBackspaceTests.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/SessionPersistenceTests.swift.o"
         },
         {
@@ -477,6 +517,7 @@
         "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/EditorStateTests.swift",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/EditorWorkflowTests.swift",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/FileServiceTests.swift",
+        "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/NativeTextEditorBackspaceTests.swift",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/SessionPersistenceTests.swift",
         "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/TabBarViewLayoutTests.swift"
       ],
@@ -492,7 +533,6 @@
       "/Library/Developer/CommandLineTools/usr/bin/swiftc",
       "-module-name",
       "TextEditor",
-      "-incremental",
       "-c",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Models/EditorState.swift",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Models/FileDocument.swift",
@@ -505,6 +545,7 @@
       "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/ContentView.swift",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/EditorView.swift",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/FindReplaceBar.swift",
+      "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/GlowlessTextView.swift",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/LineNumberView.swift",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/NativeTextEditor.swift",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/TabBarView.swift",
@@ -514,7 +555,9 @@
       "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/Modules",
       "-target",
       "arm64-apple-macosx12.0",
+      "-incremental",
       "-enable-batch-mode",
+      "-serialize-diagnostics",
       "-index-store-path",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/index/store",
       "-Onone",
@@ -522,6 +565,7 @@
       "-j10",
       "-DSWIFT_PACKAGE",
       "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_AVAILABLE",
       "-module-cache-path",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/ModuleCache",
       "-parseable-output",
@@ -531,8 +575,12 @@
       "TextEditor_main",
       "-swift-version",
       "5",
-      "-F",
+      "-I",
       "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-L",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-plugin-path",
+      "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
       "-sdk",
       "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
       "-g",
@@ -551,14 +599,15 @@
       "/Library/Developer/CommandLineTools/usr/bin/swiftc",
       "-module-name",
       "TextEditorPackageTests",
-      "-incremental",
       "-c",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorPackageTests.derived/runner.swift",
       "-I",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/Modules",
       "-target",
       "arm64-apple-macosx12.0",
+      "-incremental",
       "-enable-batch-mode",
+      "-serialize-diagnostics",
       "-index-store-path",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/index/store",
       "-Onone",
@@ -568,15 +617,20 @@
       "-j10",
       "-DSWIFT_PACKAGE",
       "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
       "-module-cache-path",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/ModuleCache",
       "-parseable-output",
       "-parse-as-library",
       "-emit-objc-header",
       "-emit-objc-header-path",
-      "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorPackageTests.build/TextEditorPackageTests-Swift.h",
-      "-F",
+      "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorPackageTests.build/include/TextEditorPackageTests-Swift.h",
+      "-I",
       "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-L",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-plugin-path",
+      "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
       "-sdk",
       "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
       "-g",
@@ -595,20 +649,22 @@
       "/Library/Developer/CommandLineTools/usr/bin/swiftc",
       "-module-name",
       "TextEditorTests",
-      "-incremental",
       "-c",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/AutoSaveIntegrationTests.swift",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/EditedFilePromptControllerTests.swift",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/EditorStateTests.swift",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/EditorWorkflowTests.swift",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/FileServiceTests.swift",
+      "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/NativeTextEditorBackspaceTests.swift",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/SessionPersistenceTests.swift",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/TabBarViewLayoutTests.swift",
       "-I",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/Modules",
       "-target",
       "arm64-apple-macosx12.0",
+      "-incremental",
       "-enable-batch-mode",
+      "-serialize-diagnostics",
       "-index-store-path",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/index/store",
       "-Onone",
@@ -618,14 +674,19 @@
       "-j10",
       "-DSWIFT_PACKAGE",
       "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
       "-module-cache-path",
       "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/ModuleCache",
       "-parseable-output",
       "-parse-as-library",
       "-swift-version",
       "5",
-      "-F",
+      "-I",
       "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-L",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-plugin-path",
+      "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
       "-sdk",
       "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
       "-g",
@@ -670,7 +731,9 @@
     }
   },
   "traitConfiguration" : {
-    "enableAllTraits" : false
+    "default" : {
+
+    }
   },
   "writeCommands" : {
     "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor-entitlement.plist" : {
@@ -740,6 +803,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/GlowlessTextView.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/Sources/TextEditor/Views/LineNumberView.swift"
         },
         {
@@ -799,6 +866,10 @@
         {
           "kind" : "file",
           "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/FindReplaceBar.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/GlowlessTextView.swift.o"
         },
         {
           "kind" : "file",
@@ -890,6 +961,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/GlowlessTextView.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditor.build/LineNumberView.swift.o"
         },
         {
@@ -946,6 +1021,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/NativeTextEditorBackspaceTests.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/.build/arm64-apple-macosx/debug/TextEditorTests.build/SessionPersistenceTests.swift.o"
         },
         {
@@ -981,6 +1060,10 @@
         {
           "kind" : "file",
           "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/FileServiceTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/brandon/Repos/mac-text-editor/TextEditor/Tests/TextEditorTests/NativeTextEditorBackspaceTests.swift"
         },
         {
           "kind" : "file",
