@@ -32,8 +32,20 @@ struct ContentView: View {
         .onAppear {
             AppDelegate.shared?.shouldTerminateHandler = confirmApplicationTermination
             loadSession()
+            AppDelegate.shared?.registerOpenFilesHandler { paths in
+                openFilesFromExternalSource(paths)
+            }
+            if let startupFiles = AppDelegate.shared?.consumePendingOpenFiles(), !startupFiles.isEmpty {
+                openFilesFromExternalSource(startupFiles)
+            } else {
+                openFilesFromProcessArguments()
+            }
             startAutoSave()
             activateAppWindow()
+        }
+        .onOpenURL { url in
+            guard url.isFileURL else { return }
+            openFilesFromExternalSource([url.path])
         }
         .onDisappear {
             if AppDelegate.shared?.shouldTerminateHandler != nil {
@@ -143,6 +155,32 @@ struct ContentView: View {
         } catch {
             logger.error("Failed to open file at path \(fileURL.path, privacy: .public): \(error.localizedDescription, privacy: .public)")
             return
+        }
+    }
+
+    private func openFilesFromExternalSource(_ filePaths: [String]) {
+        for filePath in filePaths {
+            do {
+                let fileContent = try FileService.shared.readFile(path: filePath)
+                logger.info("Opening external file at path \(filePath, privacy: .public)")
+                state.openFile(filePath, content: fileContent)
+            } catch {
+                logger.error("Failed to open file at path \(filePath, privacy: .public): \(error.localizedDescription, privacy: .public)")
+            }
+        }
+    }
+
+    private func openFilesFromProcessArguments() {
+        let args = ProcessInfo.processInfo.arguments
+        guard args.count > 1 else { return }
+
+        let fileArgs = args
+            .dropFirst()
+            .filter { !$0.hasPrefix("-") }
+            .filter { FileService.shared.fileExists(path: $0) }
+
+        if !fileArgs.isEmpty {
+            openFilesFromExternalSource(fileArgs)
         }
     }
 

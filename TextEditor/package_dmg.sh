@@ -243,6 +243,24 @@ cat > "${APP_BUNDLE}/Contents/Info.plist" <<PLIST
   <string>${APP_NAME}</string>
   <key>CFBundlePackageType</key>
   <string>APPL</string>
+  <key>CFBundleDocumentTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleTypeName</key>
+      <string>Text and Data Files</string>
+      <key>CFBundleTypeRole</key>
+      <string>Editor</string>
+      <key>LSHandlerRank</key>
+      <string>Alternate</string>
+      <key>LSItemContentTypes</key>
+      <array>
+        <string>public.text</string>
+        <string>public.plain-text</string>
+        <string>public.source-code</string>
+        <string>public.data</string>
+      </array>
+    </dict>
+  </array>
   <key>CFBundleShortVersionString</key>
   <string>${VERSION}</string>
   <key>CFBundleVersion</key>
